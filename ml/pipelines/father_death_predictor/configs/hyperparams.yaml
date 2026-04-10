@@ -1,0 +1,40 @@
+# Default hyperparameters for father death prediction pipeline
+
+# Data split (from training set, since test set is separate)
+val_fraction: 0.25
+random_seed: 42
+
+# Feature extraction
+ayanamsha: lahiri
+house_system: equal
+node_type: mean  # Mean node for Parashari
+parallel_workers: null  # null = use all CPUs
+
+# LightGBM defaults (before Optuna tuning)
+lgbm:
+  device: gpu  # gpu with CPU fallback
+  n_estimators: 500
+  learning_rate: 0.05
+  max_depth: 5
+  num_leaves: 31
+  min_child_samples: 20
+  class_weight: balanced
+  early_stopping_rounds: 50
+
+# Optuna — capped at 5 trials, persisted to SQLite
+optuna:
+  n_trials: 5
+  storage: output/optuna_study.db
+
+# Survival model
+survival:
+  penalizer: 0.1
+
+# Class boundaries (native's age when father died)
+class_boundaries:
+  alpayu_max: 18     # <18 = alpayu
+  madhyayu_max: 40   # 18-40 = madhyayu, >40 = purnayu
+
+# Evaluation
+bootstrap_n: 1000
+mcnemar_alpha: 0.05

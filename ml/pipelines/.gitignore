@@ -1,0 +1,6 @@
+# Pipeline caches — per-tradition, never committed
+*/cache/*.pkl
+*/cache/*.json
+ensemble/ensemble_results.json
+__pycache__/
+*/__pycache__/

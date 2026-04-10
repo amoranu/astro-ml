@@ -1,0 +1,147 @@
+{
+  "version": "V4",
+  "timestamp": "2026-04-01T22:44:46.598834",
+  "train_charts": 1990,
+  "test_charts": 469,
+  "n_features": 55,
+  "feature_names": [
+    "cusp3_dasha_active",
+    "cusp3_lock_level",
+    "cusp3_has_lock",
+    "cusp3_transit_active",
+    "cusp3_transit_ingress",
+    "cusp3_transit_orb_inv",
+    "cusp3_double_active",
+    "cusp4_dasha_active",
+    "cusp4_lock_level",
+    "cusp4_has_lock",
+    "cusp4_transit_active",
+    "cusp4_transit_ingress",
+    "cusp4_transit_orb_inv",
+    "cusp4_double_active",
+    "cusp10_dasha_active",
+    "cusp10_lock_level",
+    "cusp10_has_lock",
+    "cusp10_transit_active",
+    "cusp10_transit_ingress",
+    "cusp10_transit_orb_inv",
+    "cusp10_double_active",
+    "cusp8_active",
+    "cusp8_transit_orb_inv",
+    "cusp12_active",
+    "cusp12_transit_orb_inv",
+    "rank_dasha_quality_score",
+    "rank_convergence_proxy",
+    "rank_trigger_score",
+    "rank_net_activation_score",
+    "rank_death_signal_composite",
+    "rank_maraka_score",
+    "rank_transit_freshness",
+    "rank_tightest_orb_inv_primary",
+    "rank_n_ingresses_primary",
+    "rank_env_x_trigger",
+    "rank_total_signal",
+    "rank_negative_event_strength",
+    "rank_saturn_transit_density",
+    "rank_activation_density",
+    "rank_net_transit_signal",
+    "is_pd_transition",
+    "is_ad_transition",
+    "is_new_pd",
+    "yogakaraka_count",
+    "death_karaka_count",
+    "karaka_active_count",
+    "any_primary_ingress",
+    "all_three_heavy_active",
+    "saturn_is_md",
+    "saturn_dasha_level",
+    "both_marakas_active",
+    "is_peak_convergence_proxy",
+    "is_global_max_convergence_proxy",
+    "dasha_transition_count",
+    "deterministic_tier"
+  ],
+  "cv_metrics": [
+    {
+      "fold": 1,
+      "ensemble_topk": {
+        "1": 0.04271356783919598,
+        "3": 0.1407035175879397,
+        "5": 0.2236180904522613
+      },
+      "ensemble_topk_tol": {
+        "1": 0.14824120603015076,
+        "3": 0.3492462311557789,
+        "5": 0.4899497487437186
+      },
+      "ensemble_mrr": 0.16522151012585543,
+      "clf_mrr": 0.15570416569322248,
+      "ranker_mrr": 0.1723422677818009
+    },
+    {
+      "fold": 2,
+      "ensemble_topk": {
+        "1": 0.04522613065326633,
+        "3": 0.135678391959799,
+        "5": 0.20603015075376885
+      },
+      "ensemble_topk_tol": {
+        "1": 0.10050251256281408,
+        "3": 0.271356783919598,
+        "5": 0.41959798994974873
+      },
+      "ensemble_mrr": 0.16568561240178328,
+      "clf_mrr": 0.16428297807771025,
+      "ranker_mrr": 0.1641660534147819
+    },
+    {
+      "fold": 3,
+      "ensemble_topk": {
+        "1": 0.04020100502512563,
+        "3": 0.12562814070351758,
+        "5": 0.20100502512562815
+      },
+      "ensemble_topk_tol": {
+        "1": 0.11557788944723618,
+        "3": 0.3241206030150754,
+        "5": 0.44974874371859297
+      },
+      "ensemble_mrr": 0.1561014067151191,
+      "clf_mrr": 0.15993114134513997,
+      "ranker_mrr": 0.17078193017894172
+    },
+    {
+      "fold": 4,
+      "ensemble_topk": {
+        "1": 0.037783375314861464,
+        "3": 0.13602015113350127,
+        "5": 0.19899244332493704
+      },
+      "ensemble_topk_tol": {
+        "1": 0.12090680100755667,
+        "3": 0.3198992443324937,
+        "5": 0.4357682619647355
+      },
+      "ensemble_mrr": 0.1571076432406474,
+      "clf_mrr": 0.16909410515891138,
+      "ranker_mrr": 0.16390641473999484
+    },
+    {
+      "fold": 5,
+      "ensemble_topk": {
+        "1": 0.055415617128463476,
+        "3": 0.1309823677581864,
+        "5": 0.23425692695214106
+      },
+      "ensemble_topk_tol": {
+        "1": 0.15365239294710328,
+        "3": 0.34760705289672544,
+        "5": 0.5012594458438288
+      },
+      "ensemble_mrr": 0.1738901233966826,
+      "clf_mrr": 0.16983030375806563,
+      "ranker_mrr": 0.171341800800827
+    }
+  ],
+  "elapsed_seconds": 145.47312021255493
+}

@@ -1,0 +1,164 @@
+{
+  "version": "V5",
+  "timestamp": "2026-04-01T23:05:13.068768",
+  "n_features": 74,
+  "feature_names": [
+    "cusp3_dasha_active",
+    "cusp3_lock_level",
+    "cusp3_has_lock",
+    "cusp3_transit_active",
+    "cusp3_transit_ingress",
+    "cusp3_transit_orb_inv",
+    "cusp3_double_active",
+    "cusp4_dasha_active",
+    "cusp4_lock_level",
+    "cusp4_has_lock",
+    "cusp4_transit_active",
+    "cusp4_transit_ingress",
+    "cusp4_transit_orb_inv",
+    "cusp4_double_active",
+    "cusp10_dasha_active",
+    "cusp10_lock_level",
+    "cusp10_has_lock",
+    "cusp10_transit_active",
+    "cusp10_transit_ingress",
+    "cusp10_transit_orb_inv",
+    "cusp10_double_active",
+    "cusp8_active",
+    "cusp8_transit_orb_inv",
+    "cusp12_active",
+    "cusp12_transit_orb_inv",
+    "rank_dasha_quality_score",
+    "rank_convergence_proxy",
+    "rank_trigger_score",
+    "rank_net_activation_score",
+    "rank_death_signal_composite",
+    "rank_maraka_score",
+    "rank_transit_freshness",
+    "rank_tightest_orb_inv_primary",
+    "rank_n_ingresses_primary",
+    "rank_env_x_trigger",
+    "rank_total_signal",
+    "rank_negative_event_strength",
+    "rank_saturn_transit_density",
+    "rank_activation_density",
+    "rank_net_transit_signal",
+    "rule_tier_score",
+    "rule_score_normalized",
+    "rule_n_primary_active",
+    "rule_n_primary_locks",
+    "rule_n_primary_double",
+    "rule_n_secondary_active",
+    "rule_n_negative_active",
+    "rule_total_quality",
+    "rule_yogakaraka_count",
+    "rule_death_karaka_active",
+    "rule_sun_active",
+    "rule_cusp4_lock_bonus",
+    "margin_from_best_convergence_proxy",
+    "is_unique_best_convergence_proxy",
+    "margin_from_best_trigger_score",
+    "is_unique_best_trigger_score",
+    "margin_from_best_net_transit_signal",
+    "is_unique_best_net_transit_signal",
+    "margin_from_best_transit_freshness",
+    "is_unique_best_transit_freshness",
+    "n_unique_best_flags",
+    "rule_score_margin_from_best",
+    "rank_composite_mean",
+    "rank_composite_max_count",
+    "is_pd_transition",
+    "is_ad_transition",
+    "is_new_pd",
+    "any_primary_ingress",
+    "all_three_heavy_active",
+    "saturn_is_md",
+    "saturn_dasha_level",
+    "both_marakas_active",
+    "dasha_transition_count",
+    "deterministic_tier"
+  ],
+  "cv_metrics": [
+    {
+      "fold": 1,
+      "ensemble_topk": {
+        "1": 0.04773869346733668,
+        "3": 0.12311557788944724,
+        "5": 0.21105527638190955
+      },
+      "ensemble_topk_tol": {
+        "1": 0.12311557788944724,
+        "3": 0.3316582914572864,
+        "5": 0.49246231155778897
+      },
+      "ensemble_mrr": 0.16285800709356316,
+      "clf_mrr": 0.17040337690032575,
+      "ranker_mrr": 0.16334854038255314
+    },
+    {
+      "fold": 2,
+      "ensemble_topk": {
+        "1": 0.04773869346733668,
+        "3": 0.135678391959799,
+        "5": 0.20351758793969849
+      },
+      "ensemble_topk_tol": {
+        "1": 0.135678391959799,
+        "3": 0.3065326633165829,
+        "5": 0.4120603015075377
+      },
+      "ensemble_mrr": 0.15941794480174373,
+      "clf_mrr": 0.16008403879790756,
+      "ranker_mrr": 0.16053645315004658
+    },
+    {
+      "fold": 3,
+      "ensemble_topk": {
+        "1": 0.05025125628140704,
+        "3": 0.135678391959799,
+        "5": 0.21608040201005024
+      },
+      "ensemble_topk_tol": {
+        "1": 0.11809045226130653,
+        "3": 0.2814070351758794,
+        "5": 0.4271356783919598
+      },
+      "ensemble_mrr": 0.16460130630135186,
+      "clf_mrr": 0.1571276020190195,
+      "ranker_mrr": 0.1589832288176028
+    },
+    {
+      "fold": 4,
+      "ensemble_topk": {
+        "1": 0.0327455919395466,
+        "3": 0.13350125944584382,
+        "5": 0.21158690176322417
+      },
+      "ensemble_topk_tol": {
+        "1": 0.10327455919395466,
+        "3": 0.32997481108312343,
+        "5": 0.4659949622166247
+      },
+      "ensemble_mrr": 0.15352233776790233,
+      "clf_mrr": 0.16723990059468563,
+      "ranker_mrr": 0.15452562053647664
+    },
+    {
+      "fold": 5,
+      "ensemble_topk": {
+        "1": 0.04534005037783375,
+        "3": 0.1385390428211587,
+        "5": 0.21914357682619648
+      },
+      "ensemble_topk_tol": {
+        "1": 0.15365239294710328,
+        "3": 0.345088161209068,
+        "5": 0.49370277078085645
+      },
+      "ensemble_mrr": 0.1594103272777175,
+      "clf_mrr": 0.1546062030115228,
+      "ranker_mrr": 0.15672662613215851
+    }
+  ],
+  "elapsed_seconds": 126.79705023765564
+}

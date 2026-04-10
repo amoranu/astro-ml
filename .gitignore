@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / agent
+.vscode/
+.idea/
+.claude/
+.agent/
+.aider*
+.axon/
+.mcp.json
+
+# Logs / scratch
+*.log
+err.txt
+out.txt
+
+# Large reference corpus (PDFs too large for GitHub)
+corpus/
+
+# Pipeline caches — per-tradition, never committed
+**/cache/*.pkl
+**/cache/*.json
+**/__pycache__/
+
+# astro_ml legacy artifacts (cached features, models, generated data)
+astro_ml/cache/
+astro_ml/data/
+
+# ML pipeline artifacts (cached features, models, data)
+ml/pipelines/father_death_predictor/data/
+ml/pipelines/father_death_predictor/output/
+ml/*_clean.json
+ml/spouse_passing_date_*.json
