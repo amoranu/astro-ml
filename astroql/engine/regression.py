@@ -84,6 +84,44 @@ class Metrics:
         return out
 
 
+@dataclass
+class RankMetrics:
+    """Rank-based metrics for the critic-loop commit gate.
+
+    Binary hit/miss is too coarse: with ~150 SD epochs in a 3-year
+    window, a proposed rule that improves the truth-epoch's rank
+    from #20 to #5 is a real win even if it doesn't flip the
+    binary "predicted = truth" outcome (which only flips at rank=1).
+
+    `mrr` (Mean Reciprocal Rank): mean of 1/rank across charts where
+        rank is the 1-indexed position of the truth-epoch in the
+        descending |CF| ordering. Higher = better. 1.0 = perfect.
+    `top_k_recall` (k=1, 3, 10): fraction of charts where the
+        truth-epoch is in the top-k by |CF|. Top_1 ≡ binary "exact
+        prediction". Top_3 captures "near-misses you'd accept".
+    `median_rank`: tail-resistant central tendency.
+    `n_ranked`: count of charts with a usable truth+score table.
+    """
+    n_ranked: int
+    mrr: float
+    median_rank: float
+    top_1_recall: float
+    top_3_recall: float
+    top_10_recall: float
+    ranks: List[int] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "n_ranked": self.n_ranked,
+            "mrr": self.mrr,
+            "median_rank": self.median_rank,
+            "top_1_recall": self.top_1_recall,
+            "top_3_recall": self.top_3_recall,
+            "top_10_recall": self.top_10_recall,
+            "ranks": list(self.ranks),
+        }
+
+
 # ── Deterministic split ────────────────────────────────────────────
 
 def _stable_hash(text: str, seed: int) -> int:
@@ -266,3 +304,99 @@ def load_records(path: Path) -> List[Dict[str, Any]]:
 def save_manifest(manifest: SplitManifest, path: Path) -> None:
     with open(path, "w", encoding="utf-8") as f:
         json.dump(manifest.to_dict(), f, indent=2)
+
+
+# ── Rank-based metrics (NEUROSYMBOLIC_ENGINE_DESIGN.md §3.E v2) ───
+
+def evaluate_ranks(
+    records: List[Dict[str, Any]],
+    rank_fn: Callable[[Dict[str, Any]],
+                      Optional[Tuple[int, int]]],
+) -> RankMetrics:
+    """Score the truth-epoch rank across a holdout.
+
+    Args:
+        records: holdout records (must each have an `id` field;
+            truth date is the rank function's responsibility).
+        rank_fn: takes a record, returns `(truth_rank, total_epochs)`
+            where `truth_rank` is the 1-indexed position of the
+            truth-containing epoch in the descending |CF| ordering,
+            or None when the truth-epoch can't be located (out of
+            window, no prediction, etc.).
+
+    The rank function is responsible for:
+      * running the predictor over the chart's window,
+      * finding the SD epoch that contains the truth date,
+      * sorting all SD epochs by |CF| descending,
+      * returning that epoch's 1-indexed position.
+    """
+    ranks: List[int] = []
+    for rec in records:
+        result = rank_fn(rec)
+        if result is None:
+            continue
+        rank, _total = result
+        if rank < 1:
+            continue
+        ranks.append(rank)
+    if not ranks:
+        return RankMetrics(
+            n_ranked=0, mrr=0.0, median_rank=0.0,
+            top_1_recall=0.0, top_3_recall=0.0, top_10_recall=0.0,
+            ranks=[],
+        )
+    n = len(ranks)
+    mrr = sum(1.0 / r for r in ranks) / n
+    sorted_ranks = sorted(ranks)
+    if n % 2 == 1:
+        median = float(sorted_ranks[n // 2])
+    else:
+        median = (sorted_ranks[n // 2 - 1] + sorted_ranks[n // 2]) / 2.0
+    top1 = sum(1 for r in ranks if r <= 1) / n
+    top3 = sum(1 for r in ranks if r <= 3) / n
+    top10 = sum(1 for r in ranks if r <= 10) / n
+    return RankMetrics(
+        n_ranked=n, mrr=mrr, median_rank=median,
+        top_1_recall=top1, top_3_recall=top3, top_10_recall=top10,
+        ranks=ranks,
+    )
+
+
+def rank_commit_gate(
+    new: RankMetrics,
+    old: RankMetrics,
+    *,
+    require_strict_mrr_gain: bool = True,
+    top3_tolerance: float = 0.0,
+) -> Tuple[bool, str]:
+    """Decide whether a critic-proposed rule should commit, using
+    rank-based metrics instead of binary hit/miss.
+
+    Per the reviewer (and Cox-style time-to-event evaluation):
+      * MRR going UP → the truth-epoch is being pushed earlier in
+        the ranking on average → unambiguous improvement.
+      * Top-3 recall is the practical "did the predictor put truth
+        in the candidate set" — must not regress.
+      * Top-1 (exact) is allowed to drop slightly: a rule that
+        trades a few exact wins for a much higher MRR is a net win.
+
+    Returns (commit_ok, reason).
+    """
+    if require_strict_mrr_gain and new.mrr <= old.mrr:
+        return False, (
+            f"MRR did not improve: old={old.mrr:.4f} -> "
+            f"new={new.mrr:.4f}"
+        )
+    drop = old.top_3_recall - new.top_3_recall
+    if drop > top3_tolerance:
+        return False, (
+            f"top-3 recall regressed by {drop:.4f} "
+            f"(old={old.top_3_recall:.4f} -> "
+            f"new={new.top_3_recall:.4f}, "
+            f"tolerance={top3_tolerance:.4f})"
+        )
+    return True, (
+        f"commit OK: MRR {old.mrr:.4f} -> {new.mrr:.4f}; "
+        f"top-3 {old.top_3_recall:.4f} -> {new.top_3_recall:.4f}; "
+        f"top-1 {old.top_1_recall:.4f} -> {new.top_1_recall:.4f}"
+    )

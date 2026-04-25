@@ -63,6 +63,18 @@ class EpochState:
     # Empty when the emitter wasn't able to derive these (e.g. unit
     # tests with hand-built minimal states).
     derived_lords: Dict[str, str] = field(default_factory=dict)
+    # Bhinnashtakavarga (BAV) per planet + Sarvashtakavarga (SAV) per
+    # BPHS Ch. 66. Chart-static — bindu counts depend only on natal
+    # planet placements + lagna. Shape:
+    #   {"Saturn": {"Aries": 4, "Taurus": 5, ..., "Pisces": 3},
+    #    "Mars":   {... 12 sign keys ...},
+    #    ...
+    #    "SAV":    {"Aries": 28, ...}}
+    # Reachable via DSL path "ashtakavarga.Saturn.Aries". Used to
+    # GATE transit rules: a malefic transit through a low-bindu sign
+    # carries classical maraka force; through a high-bindu sign it
+    # does not (BPHS Ch. 66). See engine.ashtakavarga.bav_grid.
+    ashtakavarga: Dict[str, Dict[str, int]] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         out: Dict[str, Any] = {
@@ -72,6 +84,10 @@ class EpochState:
             "dashas": asdict(self.dashas),
             "natal_lagna_sign": self.natal_lagna_sign,
             "derived_lords": dict(self.derived_lords),
+            "ashtakavarga": {
+                planet: dict(grid)
+                for planet, grid in self.ashtakavarga.items()
+            },
             "planets": {
                 name: asdict(ps) for name, ps in self.planets.items()
             },
@@ -91,5 +107,9 @@ class EpochState:
             dashas=DashaStack(**d["dashas"]),
             natal_lagna_sign=d.get("natal_lagna_sign", ""),
             derived_lords=dict(d.get("derived_lords", {})),
+            ashtakavarga={
+                planet: dict(grid)
+                for planet, grid in d.get("ashtakavarga", {}).items()
+            },
             planets=planets,
         )

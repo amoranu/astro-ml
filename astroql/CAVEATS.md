@@ -234,3 +234,86 @@ Median rank   360           363          ±0
 ```
 
 Per-chart results saved at `/tmp/bench_30_v5.json`.
+
+---
+
+## Open (engine v2 review — 2026-04-25)
+
+### CAV-NS-100 — JSON DSL evaluator + LLM autonomy — closed (partial)
+- engine/dsl_evaluator.py: dot-path traversal + operators (==, !=, <, <=,
+  >, >=, in, not_in, contains, truthy, falsy) + combinators (all/any/not).
+- cf_engine.infer_cf accepts epoch_state and re-evaluates
+  Rule.modifiers[].condition via the DSL when populated; legacy
+  fired_modifier_indices path preserved unchanged.
+- CFRuleSpec.fires_when and modifier_predicates now accept either a
+  Python callable OR a JSON dict; cf_predict._resolve_predicate
+  dispatches on type. LLM-emitted JSON rules execute identically to
+  human-written lambdas.
+- EpochState.derived_lords + EpochState.ashtakavarga populate so
+  DSL paths reach lord identities and BAV bindus without helpers.
+- Open: existing v12-v15 rules still use Python lambdas. Migration
+  to JSON conditions is mechanical and incremental — both paths
+  co-exist. Track per-rule migration in application READMEs.
+
+### CAV-NS-101 — Correlation-group max-pooling — closed
+- Rule.correlation_group (Optional[str]); when two+ fired rules
+  share a tag, only the largest |final_cf| survives into MYCIN
+  aggregation. Audit-trail via FiredRuleTrace.suppressed_by_group.
+- Addresses MYCIN's independence assumption flaw on highly-
+  correlated astrological evidence (Saturn-9H + Saturn-aspect-9L).
+
+### CAV-NS-102 — Rank-based commit gate — closed
+- regression.evaluate_ranks + RankMetrics (MRR, top-1/3/10 recall,
+  median rank). regression.rank_commit_gate accepts a proposed rule
+  if MRR strictly improves AND top-3 recall does not regress beyond
+  tolerance. Top-1 (exact-match) drops are allowed when rank metrics
+  improve overall — matches Cox-style time-to-event evaluation.
+- Old hit/miss commit_gate retained for back-compat; callers pick.
+
+### CAV-NS-103 — Avasthas (combustion + planetary war) — open
+- Reviewer flagged: shadbala captures quantitative strength but
+  ignores Avasthas (qualitative state). A combust benefic Jupiter
+  is "dead" for benefic purposes; a defeated planet in graha-yuddha
+  should have its CF inverted/penalized.
+- Required additions:
+    * EpochState.PlanetEpochState.is_combust: bool
+    * EpochState.PlanetEpochState.is_in_planetary_war: bool
+    * EpochState.PlanetEpochState.war_winner: Optional[str]
+- Combustion orbs (BPHS): Mercury 14°, Venus 10°, Mars 17°,
+  Jupiter 11°, Saturn 15°. Need per-planet longitude data on
+  EpochState (currently we only carry transit_sign + house).
+- Graha-yuddha: two non-luminary planets within ~1° → defeated
+  planet's CF flips. Same longitude requirement.
+- Action: extend epoch_emitter to attach longitudes; add helpers
+  in engine/avasthas.py that compute the booleans; update
+  PlanetEpochState schema; add DSL paths
+  "planets.<P>.is_combust" etc. so JSON rules can condition on it.
+
+### CAV-NS-104 — Multi-dasha consensus (Yogini + Chara) — open
+- Reviewer: Vimshottari alone caps accuracy ~70-75% per classical
+  texts; major events require consensus across timekeeping systems.
+- ml/pipelines/father_death_predictor/astro_engine/yogini_dasha.py
+  and chara_dasha.py exist but aren't wired into epoch_emitter.
+- Required:
+    * Parallel dasha emission: emit_epochs returns triplets
+      (vimshottari_dashas, yogini_dashas, chara_dashas) per SD.
+    * EpochState.dashas → Dict[scheme, DashaStack] (currently single
+      DashaStack assumed Vimshottari).
+    * Consensus multiplier in cf_engine: scan all schemes' active
+      sub-period lords; if multiple schemes agree on negative
+      lords, multiply final_cf by 1.5. If schemes disagree (one
+      protective, one afflictive), dampen.
+- Big lift; requires careful schema migration (legacy callers
+  expect single dasha stack).
+
+### CAV-NS-105 — Overlap-fraction sampling for transits — open
+- cf_engine.infer_cf accepts overlap_dampening per-rule factor
+  (default 1.0 = no-op). Computing the actual fraction (sample
+  N points within each SD, count how many trigger the rule)
+  requires multi-point sampling in epoch_emitter.
+- Current emitter computes positions at SD midpoint only; a fast
+  Moon transit triggering a rule for ~2 days within a 5-day SD
+  is treated identically to a 5-day-sustained Saturn transit.
+- Action: emit_epochs(..., transit_sample_points=3) → re-evaluate
+  predicates at start, mid, end; compute overlap fraction per
+  fired rule; pass dict to infer_cf via overlap_dampening.

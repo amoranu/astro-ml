@@ -243,6 +243,77 @@ def infer_cf(
         ))
         modulated.append(final_cf)
 
-    score = cf_math.aggregate(modulated)
+    # ── Correlation-group max-pooling (design v2) ─────────────────
+    # MYCIN's combine() assumes independence. Highly correlated rules
+    # (same astrological signal seen from two angles) double-count and
+    # push the score aggressively toward ±1. Group same-tagged rules
+    # and keep only the one with the largest |final_cf| per group.
+    # Untagged rules pass through individually.
+    pooled = _max_pool_correlation_groups(surviving, modulated, trace)
+
+    score = cf_math.aggregate(pooled)
     trace.final_score = score
     return score, trace
+
+
+def _max_pool_correlation_groups(
+    surviving: List[FiredRule],
+    modulated: List[float],
+    trace: ExecutionTrace,
+) -> List[float]:
+    """Collapse fired rules sharing a `correlation_group` to the
+    single highest-magnitude representative; pass untagged rules
+    through unchanged.
+
+    `surviving` and `modulated` are 1:1 by index for the rules that
+    actually contributed a CF (those with effective base != 0 after
+    modifier composition + μ modulation). Order is preserved.
+
+    Side-effect: updates `trace.rules_fired[i].suppressed_by_group`
+    so the audit trail records which rules were max-pooled out.
+    """
+    # Pair up surviving rules with their modulated CFs. Only rules
+    # that actually emitted a CF are in `modulated` — match by order.
+    contributors: List[Tuple[FiredRule, float, int]] = []
+    contrib_idx = 0
+    for fr in surviving:
+        if fr.rule.is_veto:
+            continue
+        # Re-replay the skip condition the main loop applied: only
+        # rules that ended up emitting a final_cf are in `modulated`.
+        # We can't easily reverse-engineer here — so callers who care
+        # about exact ordering must call this with a parallel list.
+        if contrib_idx >= len(modulated):
+            break
+        contributors.append((fr, modulated[contrib_idx], contrib_idx))
+        contrib_idx += 1
+
+    groups: Dict[str, Tuple[FiredRule, float, int]] = {}
+    pooled: List[float] = []
+    independent: List[Tuple[int, float]] = []  # (orig_idx, cf)
+    for fr, cf, oi in contributors:
+        tag = fr.rule.correlation_group
+        if not tag:
+            independent.append((oi, cf))
+            continue
+        cur = groups.get(tag)
+        if cur is None or abs(cf) > abs(cur[1]):
+            groups[tag] = (fr, cf, oi)
+
+    # Mark suppressed group members in the trace.
+    surviving_oi = {oi for (_, _, oi) in groups.values()}
+    for fr, cf, oi in contributors:
+        tag = fr.rule.correlation_group
+        if tag and oi not in surviving_oi:
+            if oi < len(trace.rules_fired):
+                trace.rules_fired[oi].suppressed_by_group = tag
+
+    # Emit pooled list in the original encounter order so traces
+    # stay stable / deterministic.
+    pooled_set = {oi for (_, _, oi) in groups.values()}
+    indep_set = {oi for (oi, _) in independent}
+    cf_by_oi = {oi: cf for (_, cf, oi) in groups.values()}
+    cf_by_oi.update({oi: cf for (oi, cf) in independent})
+    for oi in sorted(pooled_set | indep_set):
+        pooled.append(cf_by_oi[oi])
+    return pooled

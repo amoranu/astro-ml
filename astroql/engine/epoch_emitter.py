@@ -33,6 +33,7 @@ from ..schemas.epoch_state import (
     PlanetEpochState,
 )
 from . import aspects as _aspects
+from . import ashtakavarga as _ashtakavarga
 from . import shadbala as _sb
 
 
@@ -245,6 +246,23 @@ def emit_epochs(
         sun_natal_sign=natal_sign_by_planet.get("Sun", ""),
     )
 
+    # ── Bhinnashtakavarga grid (chart-static, BPHS Ch. 66) ───────
+    # Computed once from natal positions; reused across all SD
+    # epochs. Used to GATE transit rules — see
+    # `engine.ashtakavarga` for the gating-pattern docstring.
+    try:
+        bav_table = _ashtakavarga.bav_grid(
+            sign_by_planet=natal_sign_by_planet,
+            lagna_sign=natal_lagna["rashi"],
+        )
+    except Exception:
+        # If natal data is incomplete, leave the grid empty. DSL
+        # rules that reference ashtakavarga.* will fail to fire
+        # (treated as a missing path); the rest of the engine
+        # continues to work. This matches existing tolerance for
+        # incomplete shadbala / nodes.
+        bav_table = {}
+
     # ── Sookshma-depth dasha sequence, clipped to query window ──────
     moon_lon = float(natal_positions["Moon"]["longitude"])
     raw_seq = engine.calculate_dasha_sequence(
@@ -339,6 +357,7 @@ def emit_epochs(
             planets=planets_out,
             natal_lagna_sign=natal_lagna["rashi"],
             derived_lords=derived_lords,
+            ashtakavarga=bav_table,
         ))
 
     return epochs

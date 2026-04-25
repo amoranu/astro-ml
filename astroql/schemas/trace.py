@@ -18,6 +18,11 @@ class FiredRuleTrace:
     strength_multiplier: float  # μ
     modifiers_applied: List[str] = field(default_factory=list)
     final_cf: float = 0.0      # base_cf * μ, plus any modifier effects
+    # Set when this rule fired but was max-pooled out of MYCIN
+    # aggregation because another rule in the same correlation_group
+    # had a larger |final_cf|. Audit-only; the rule still appears in
+    # `rules_fired` so the critic can see the full story.
+    suppressed_by_group: Optional[str] = None
 
 
 @dataclass

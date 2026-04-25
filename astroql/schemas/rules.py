@@ -101,6 +101,24 @@ class Rule:
     modifiers: List[CFModifier] = field(default_factory=list)
     provenance: Optional[Provenance] = None
     primary_planet: Optional[str] = None
+    # ── Correlation grouping (max-pool, design v2) ──────────────────
+    # MYCIN's combine() assumes evidence pieces are statistically
+    # independent. In astrology many rules are highly correlated —
+    # e.g. "Saturn transits 9H" and "Saturn aspects 9L" both ride
+    # on the same underlying planet placement. Combining them via
+    # MYCIN compounds toward ±1 (false-positive amplification).
+    #
+    # When two or more fired rules share the same `correlation_group`
+    # tag, the engine MAX-POOLS them: only the rule with the largest
+    # |effective_cf| in the group survives into the MYCIN aggregation
+    # step. Independent groups still combine via MYCIN.
+    #
+    # Suggested tag taxonomy (string is opaque to the engine):
+    #   "saturn_affliction_to_father_bhava"
+    #   "rahu_axis_on_sun"
+    #   "jupiter_protection_to_sun"
+    # None = rule contributes independently (legacy behavior).
+    correlation_group: Optional[str] = None
 
     @property
     def effective_base_cf(self) -> float:
