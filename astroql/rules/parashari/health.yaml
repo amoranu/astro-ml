@@ -1,0 +1,78 @@
+- rule_id: parashari.health.sixth_lord_in_lagna.01
+  school: parashari
+  source: BPHS — 6L in 1H afflicts native
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - health
+    effects:
+    - event_negative
+    - magnitude
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: eq
+    value: 1
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - sixth_lord
+  priority_tier: 2
+- rule_id: parashari.health.lagna_lord_strong.01
+  school: parashari
+  source: BPHS — strong lagna lord grants vitality
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - health
+    effects:
+    - magnitude
+    - event_positive
+  antecedent:
+  - feature: primary_house_data.direct.lord_dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - lagna_lord
+  - vitality
+  priority_tier: 2
+- rule_id: parashari.health.malefics_afflict_lagna.01
+  school: parashari
+  source: BPHS — malefic occupants of lagna
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - health
+    effects:
+    - event_negative
+    - magnitude
+  antecedent:
+  - feature: primary_house_data.direct.occupants
+    op: contains_any
+    value:
+    - Saturn
+    - Mars
+    - Rahu
+    - Ketu
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags:
+  - lagna
+  - malefic
+  priority_tier: 2

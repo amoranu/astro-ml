@@ -1,0 +1,17 @@
+# KP classical-override exceptions (Phase F).
+#
+# Currently empty — high-value KP overrides require engine extensions
+# (F.11): Star Lord vs Sub Lord agreement matrix, Ruling Planets at
+# window midpoint, full significator-hierarchy weighting (occupants >
+# occupants in lord's star > house lord > lord's nakshatra dispositors),
+# negative significators of focus.
+#
+# F.11 will add:
+#   - csl_signifies_only_auspicious (line-scope override killing the
+#     csl_signification line if 9H CSL signifies 1/5/9 cleanly)
+#   - sub_starlord_disagree (yoga-scope softening when star and sub
+#     point opposite directions)
+#   - ruling_planet_negation (line-scope dampener when RP at midpoint
+#     contains no negative-cluster significators)
+
+exceptions: []

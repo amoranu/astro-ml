@@ -1,0 +1,15 @@
+# Jaimini classical-override exceptions (Phase F).
+#
+# Currently empty — the high-value Jaimini overrides require engine
+# extensions (F.10): PiK extraction (Karako Bhava Nashaya), Jaimini
+# Neecha Bhanga, Argala-on-PiK with virodhargala, Chara Dasha. Once
+# those land, this file gets:
+#
+#   - pak_in_own_bhava (Karako Bhava Nashaya — amplification)
+#   - jaimini_neecha_bhanga
+#   - virodhargala_blocks_argala
+#
+# For now, no exceptions evaluated → planner runs Jaimini lines without
+# attenuation.
+
+exceptions: []

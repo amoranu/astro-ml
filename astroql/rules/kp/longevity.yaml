@@ -1,0 +1,215 @@
+- rule_id: kp.longevity.direct_csl_signifies_negative.01
+  school: kp
+  source: KP Reader IV — timing maraka events via cuspal sub-lord
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.direct.csl_signifies_negative_cluster
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: running dasha lord must also signify the cluster
+  confidence: 0.55
+  tags:
+  - csl
+  - direct
+  - kp
+  notes: 'The direct house''s CSL (e.g. 9H for father) signifying the negative
+
+    cluster (badhaka/maraka/8th-from-relationship) flags the core KP
+
+    condition for event timing. Strength of 0.55 reflects that CSL
+
+    signification alone is necessary but not sufficient; dasha confluence
+
+    completes the trigger.
+
+    '
+  priority_tier: 1
+- rule_id: kp.longevity.rotated_csl_signifies_negative.01
+  school: kp
+  source: KP Reader IV — rotated house sub-lord analysis
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.rotated.csl_signifies_negative_cluster
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - csl
+  - rotated
+  - kp
+  priority_tier: 2
+- rule_id: kp.longevity.relation_karaka_sub_in_negative.01
+  school: kp
+  source: KP — karaka sub-lord analysis for relational events
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Sun.significators
+    op: contains_any
+    value:
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags:
+  - karaka
+  - significators
+  - kp
+  - sun
+  notes: 'Simplified Phase-2 rule — Sun (father karaka). Generalizing over the
+
+    relation karaka (via rule-engine variables) is a Phase 3 feature.
+
+    '
+  priority_tier: 2
+- rule_id: kp.longevity.saturn_sub_in_negative.01
+  school: kp
+  source: KP — Saturn as ayushkaraka significator
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Saturn.significators
+    op: contains_any
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags:
+  - karaka
+  - significators
+  - kp
+  - saturn
+  priority_tier: 2
+- rule_id: kp.longevity.dbas_fully_signifies.01
+  school: kp
+  source: KP Reader VI — DBAS confluence doctrine
+  rule_type: dasha_timing
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: candidate.all_signify
+    op: eq
+    value: true
+  - feature: candidate.level
+    op: in
+    value:
+    - AD
+    - PAD
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: MD + AD + PAD all signify the target cluster
+  confidence: 0.6
+  tags:
+  - dbas
+  - confluence
+  - kp
+  priority_tier: 1
+- rule_id: kp.longevity.dba_partially_signifies.01
+  school: kp
+  source: KP Reader VI — partial DBAS confluence
+  rule_type: dasha_timing
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: candidate.all_signify
+    op: eq
+    value: false
+  - feature: candidate.level
+    op: in
+    value:
+    - AD
+    - PAD
+  consequent:
+    polarity: negative
+    strength: 0.35
+    timing_hint: MD + AD signify; PAD does not — weaker trigger
+  confidence: 0.35
+  tags:
+  - dbas
+  - kp
+  - partial
+  priority_tier: 2

@@ -1,0 +1,54 @@
+- rule_id: parashari.education.jupiter_strong.01
+  school: parashari
+  source: BPHS — Jupiter as guru/wisdom karaka
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - education
+    effects:
+    - magnitude
+    - event_positive
+  antecedent:
+  - feature: karaka_data.Jupiter.dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - jupiter
+  - education
+  priority_tier: 2
+- rule_id: parashari.education.mercury_afflicted.01
+  school: parashari
+  source: BPHS — afflicted Mercury disrupts study
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - education
+    effects:
+    - magnitude
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Mercury.dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+    - enemy
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags:
+  - mercury
+  - education
+  priority_tier: 2

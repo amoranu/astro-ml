@@ -1,0 +1,57 @@
+- rule_id: kp.marriage.csl_signifies_2_7_11.01
+  school: kp
+  source: KP Reader IV - marriage timing via CSL of 7H
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - marriage
+    effects:
+    - event_positive
+    - existence
+  antecedent:
+  - feature: primary_house_data.rotated.csl_signifies
+    op: contains_any
+    value:
+    - 2
+    - 7
+    - 11
+  consequent:
+    polarity: positive
+    strength: 0.55
+  confidence: 0.55
+  tags:
+  - csl
+  - marriage
+  - kp
+  priority_tier: 2
+- rule_id: kp.marriage.dbas_signify_marriage.01
+  school: kp
+  source: KP Reader IV - DBAS confluence for marriage
+  rule_type: dasha_timing
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - marriage
+    effects:
+    - event_positive
+  antecedent:
+  - feature: candidate.all_signify
+    op: eq
+    value: true
+  - feature: candidate.level
+    op: in
+    value:
+    - AD
+    - PAD
+  consequent:
+    polarity: positive
+    strength: 0.6
+  confidence: 0.6
+  tags:
+  - dbas
+  - kp
+  - marriage
+  priority_tier: 2

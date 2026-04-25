@@ -1,0 +1,115 @@
+- rule_id: parashari.career.tenth_lord_strong.01
+  school: parashari
+  source: BPHS Ch. 34 — 10L strong gives career success
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - magnitude
+    - event_positive
+  antecedent:
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.55
+  confidence: 0.55
+  tags:
+  - tenth_lord
+  - strong
+  priority_tier: 2
+- rule_id: parashari.career.tenth_lord_dusthana.01
+  school: parashari
+  source: BPHS — 10L in dusthana blocks career
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - magnitude
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - tenth_lord
+  - dusthana
+  priority_tier: 2
+- rule_id: parashari.career.mercury_strong.01
+  school: parashari
+  source: BPHS — Mercury karaka for intellectual work
+  rule_type: descriptive_nature
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - nature
+  antecedent:
+  - feature: karaka_data.Mercury.dignity
+    op: in
+    value:
+    - exalted
+    - own
+  consequent:
+    polarity: neutral
+    strength: 0.5
+    attributes:
+      career_type:
+      - intellectual
+      - writing
+      - communication
+      - trade
+  confidence: 0.5
+  tags:
+  - mercury
+  - career_nature
+  priority_tier: 2
+- rule_id: parashari.career.saturn_strong.01
+  school: parashari
+  source: BPHS — Saturn karaka for service/labor
+  rule_type: descriptive_nature
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - nature
+  antecedent:
+  - feature: karaka_data.Saturn.dignity
+    op: in
+    value:
+    - exalted
+    - own
+  consequent:
+    polarity: neutral
+    strength: 0.5
+    attributes:
+      career_type:
+      - service
+      - labor
+      - engineering
+      - government
+  confidence: 0.5
+  tags:
+  - saturn
+  - career_nature
+  priority_tier: 2

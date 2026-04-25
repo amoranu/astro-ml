@@ -1,0 +1,84 @@
+plan_id: kp.longevity.v1
+school: kp
+relationship: father
+life_area: longevity
+effect: event_negative
+goal: |
+  Predict timing windows for father's death event using Krishnamurti
+  Paddhati (KP) factors: 9H/rotated-9H Cuspal Sub Lord (CSL)
+  signification of negative cluster (6/8/12 from focus), karaka
+  (Sun + Saturn) significator analysis, and DBAS confluence
+  (MD/AD/PAD all signifying the cluster). Star-Sub agreement, full
+  significator hierarchy, and Ruling Planets overlay come in F.11.
+
+reasoning_lines:
+
+  - id: csl_signification
+    description: |
+      9H Cuspal Sub Lord and rotated-9H CSL signifying the negative
+      cluster (6/8/12 from focus). KP doctrine: CSL of the relevant
+      house is the "promise" check — if it doesn't signify the
+      negative cluster, death timing for that relation is unlikely
+      regardless of dasha.
+    yogas:
+      supporting:
+        - kp.longevity.direct_csl_signifies_negative.01
+        - kp.longevity.rotated_csl_signifies_negative.01
+    chart_facts:
+      supporting:
+        - feature: primary_house_data.direct.csl_signifies_negative_cluster
+          op: eq
+          value: true
+          weight: 1.5
+        - feature: primary_house_data.rotated.csl_signifies_negative_cluster
+          op: eq
+          value: true
+          weight: 1.0
+    alpha: 0.5
+    base_strength: 0.6
+
+  - id: karaka_significators
+    description: |
+      Sun (relation karaka for father) and Saturn (ayushkaraka /
+      longevity karaka) signifying death-cluster houses (6/8/12).
+      Sun strengthens relation-specific reading; Saturn anchors the
+      longevity reading.
+    yogas:
+      supporting:
+        - kp.longevity.relation_karaka_sub_in_negative.01
+        - kp.longevity.saturn_sub_in_negative.01
+    chart_facts:
+      supporting:
+        - feature: karaka_data.Sun.significators
+          op: contains_any
+          value: [6, 8, 12]
+          weight: 1.0
+        - feature: karaka_data.Saturn.significators
+          op: contains_any
+          value: [6, 8, 12]
+          weight: 1.0
+    alpha: 0.5
+    base_strength: 0.4
+
+  - id: dasha_dbas_confluence
+    description: |
+      DBAS = Dasha-Bhukti-Antardasha-Sookshma confluence. KP's central
+      timing rule: an event triggers when MD, AD, and PAD all signify
+      the same cluster of houses related to the event. all_signify=true
+      is the strongest trigger; partial confluence is a softer trigger.
+    yogas:
+      supporting:
+        - kp.longevity.dbas_fully_signifies.01
+        - kp.longevity.dba_partially_signifies.01
+    alpha: 0.5
+
+aggregation:
+  method: rrf
+  k: 60
+  weights:
+    csl_signification: 2.0
+    karaka_significators: 1.2
+    dasha_dbas_confluence: 1.5
+
+# Exceptions: full significator hierarchy + Ruling Planets in F.11.
+exceptions: []

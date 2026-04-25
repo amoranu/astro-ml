@@ -1,0 +1,748 @@
+{
+  "subject_id": 199,
+  "name": "Laurent de Brunhoff",
+  "gender": "M",
+  "age_at_loss": 12.13,
+  "age_bucket": "<15",
+  "birth": {
+    "date": "1925-08-30",
+    "time": "09:30",
+    "tz": "Europe/Paris",
+    "lat": 48.8667,
+    "lon": 2.3333,
+    "time_rating": "AA"
+  },
+  "natal_meta": {
+    "lagna_sign": "Virgo",
+    "lagna_lord": "Mercury",
+    "all_planets": {
+      "Sun": {
+        "rashi": "Leo",
+        "house": 12,
+        "nakshatra": "Purva Phalguni",
+        "dignity": "own",
+        "retrograde": false,
+        "combust": false
+      },
+      "Moon": {
+        "rashi": "Sagittarius",
+        "house": 4,
+        "nakshatra": "Purva Ashadha",
+        "dignity": "neutral",
+        "retrograde": false,
+        "combust": false
+      },
+      "Mars": {
+        "rashi": "Leo",
+        "house": 12,
+        "nakshatra": "Purva Phalguni",
+        "dignity": "friend",
+        "retrograde": false,
+        "combust": true
+      },
+      "Mercury": {
+        "rashi": "Leo",
+        "house": 12,
+        "nakshatra": "Magha",
+        "dignity": "friend",
+        "retrograde": true,
+        "combust": true
+      },
+      "Jupiter": {
+        "rashi": "Sagittarius",
+        "house": 4,
+        "nakshatra": "Purva Ashadha",
+        "dignity": "own",
+        "retrograde": true,
+        "combust": false
+      },
+      "Venus": {
+        "rashi": "Virgo",
+        "house": 1,
+        "nakshatra": "Hasta",
+        "dignity": "debilitated",
+        "retrograde": false,
+        "combust": false
+      },
+      "Saturn": {
+        "rashi": "Libra",
+        "house": 2,
+        "nakshatra": "Swati",
+        "dignity": "exalted",
+        "retrograde": false,
+        "combust": false
+      },
+      "Uranus": {
+        "rashi": "Pisces",
+        "house": 7,
+        "nakshatra": "Purva Bhadrapada",
+        "dignity": "neutral",
+        "retrograde": true,
+        "combust": false
+      },
+      "Neptune": {
+        "rashi": "Leo",
+        "house": 12,
+        "nakshatra": "Magha",
+        "dignity": "neutral",
+        "retrograde": false,
+        "combust": false
+      },
+      "Pluto": {
+        "rashi": "Gemini",
+        "house": 10,
+        "nakshatra": "Punarvasu",
+        "dignity": "neutral",
+        "retrograde": false,
+        "combust": false
+      },
+      "Rahu": {
+        "rashi": "Cancer",
+        "house": 11,
+        "nakshatra": "Pushya",
+        "dignity": "neutral",
+        "retrograde": true,
+        "combust": false
+      },
+      "Ketu": {
+        "rashi": "Capricorn",
+        "house": 5,
+        "nakshatra": "Shravana",
+        "dignity": "neutral",
+        "retrograde": true,
+        "combust": false
+      }
+    },
+    "navamsa": {
+      "planets": {
+        "Sun": {
+          "rashi": "Leo"
+        },
+        "Moon": {
+          "rashi": "Scorpio"
+        },
+        "Mars": {
+          "rashi": "Virgo"
+        },
+        "Mercury": {
+          "rashi": "Taurus"
+        },
+        "Jupiter": {
+          "rashi": "Libra"
+        },
+        "Venus": {
+          "rashi": "Gemini"
+        },
+        "Saturn": {
+          "rashi": "Pisces"
+        },
+        "Uranus": {
+          "rashi": "Cancer"
+        },
+        "Neptune": {
+          "rashi": "Aries"
+        },
+        "Pluto": {
+          "rashi": "Aries"
+        },
+        "Rahu": {
+          "rashi": "Libra"
+        },
+        "Ketu": {
+          "rashi": "Aries"
+        }
+      }
+    }
+  },
+  "father_death_date": "1937-10-16",
+  "traditions": {
+    "parashari": {
+      "resolved": {
+        "target_house_rotated": 4,
+        "target_house_direct": 9,
+        "relevant_houses": [
+          4,
+          9
+        ],
+        "relation_karakas": [
+          "Sun"
+        ],
+        "domain_karakas": [
+          "Saturn",
+          "8L"
+        ],
+        "jaimini_karakas": [
+          "PiK"
+        ]
+      },
+      "chart_static": {
+        "primary_house_data": {
+          "rotated": {
+            "house": 4,
+            "sign": "Sagittarius",
+            "lord": "Jupiter",
+            "occupants": [
+              "Moon",
+              "Jupiter"
+            ],
+            "aspects_from": [
+              "Saturn",
+              "Pluto"
+            ],
+            "badhaka_house": 7,
+            "marakas_houses": [
+              5,
+              10
+            ],
+            "lord_sign": "Sagittarius",
+            "lord_house": 4,
+            "lord_dignity": "own",
+            "lord_retrograde": true,
+            "lord_combust": false
+          },
+          "direct": {
+            "house": 9,
+            "sign": "Taurus",
+            "lord": "Venus",
+            "occupants": [],
+            "aspects_from": [],
+            "badhaka_house": 9,
+            "marakas_houses": [
+              10,
+              3
+            ],
+            "lord_sign": "Virgo",
+            "lord_house": 1,
+            "lord_dignity": "debilitated",
+            "lord_retrograde": false,
+            "lord_combust": false
+          },
+          "vipreet_raja_yoga_present": true,
+          "vipreet_raja_yoga_count": 1,
+          "neecha_bhanga_present": true,
+          "neecha_bhanga_planets": [
+            "Venus"
+          ],
+          "fourth_from_sun_house": 3,
+          "malefics_in_4h_from_sun": [],
+          "n_malefics_in_4h_from_sun": 0,
+          "benefics_aspect_4h_from_sun": [],
+          "malefics_4h_from_sun_unprotected": false
+        },
+        "karaka_data": {
+          "Sun": {
+            "planet": "Sun",
+            "sign": "Leo",
+            "house": 12,
+            "nakshatra": "Purva Phalguni",
+            "nakshatra_lord": "Venus",
+            "dignity": "own",
+            "retrograde": false,
+            "combust": false
+          },
+          "Saturn": {
+            "planet": "Saturn",
+            "sign": "Libra",
+            "house": 2,
+            "nakshatra": "Swati",
+            "nakshatra_lord": "Rahu",
+            "dignity": "exalted",
+            "retrograde": false,
+            "combust": false
+          },
+          "Moon": {
+            "planet": "Moon",
+            "sign": "Sagittarius",
+            "house": 4,
+            "nakshatra": "Purva Ashadha",
+            "nakshatra_lord": "Venus",
+            "dignity": "neutral",
+            "retrograde": false,
+            "combust": false
+          },
+          "Jupiter": {
+            "planet": "Jupiter",
+            "sign": "Sagittarius",
+            "house": 4,
+            "nakshatra": "Purva Ashadha",
+            "nakshatra_lord": "Venus",
+            "dignity": "own",
+            "retrograde": true,
+            "combust": false
+          },
+          "Venus": {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "house": 1,
+            "nakshatra": "Hasta",
+            "nakshatra_lord": "Moon",
+            "dignity": "debilitated",
+            "retrograde": false,
+            "combust": false
+          }
+        },
+        "varga_features": {
+          "D1": {
+            "target_sign": "Sagittarius",
+            "target_occupants": [
+              "Moon",
+              "Jupiter"
+            ],
+            "saturn_sign": "Libra",
+            "saturn_house": 2,
+            "saturn_dignity": "exalted",
+            "venus_sign": "Virgo",
+            "venus_house": 1,
+            "venus_dignity": "debilitated",
+            "sun_sign": "Leo",
+            "sun_house": 12,
+            "sun_dignity": "own",
+            "moon_sign": "Sagittarius",
+            "moon_house": 4,
+            "moon_dignity": "neutral",
+            "jupiter_sign": "Sagittarius",
+            "jupiter_house": 4,
+            "jupiter_dignity": "own"
+          },
+          "D8": {
+            "missing": true
+          },
+          "D12": {
+            "missing": true
+          },
+          "D30": {
+            "missing": true
+          }
+        }
+      },
+      "death_window": {
+        "leaf": {
+          "level": "PAD",
+          "md": "Moon",
+          "ad": "Jupiter",
+          "pad": "Rahu",
+          "start": "1937-08-08T00:00:00",
+          "end": "1937-10-20T00:00:00",
+          "matched_lords": [
+            "Jupiter",
+            "Moon"
+          ],
+          "lord_roles_present": [
+            "domain_karaka",
+            "eighth_from_target",
+            "rotated_lord"
+          ],
+          "n_distinct_roles": 3,
+          "chain_strength": "partial",
+          "chain_lord_in_8h": false,
+          "chain_lord_in_12h": false,
+          "chain_lord_in_dusthana": false,
+          "chain_lord_in_8h_from_target": true,
+          "n_malefics_in_chain": 1,
+          "n_benefics_in_chain": 2,
+          "n_debilitated_in_chain": 0,
+          "n_combust_in_chain": 0,
+          "md_pad_same_planet": false,
+          "md_ad_same_planet": false,
+          "window_duration_days": 73,
+          "window_short": false,
+          "window_long": false,
+          "saturn_in_chain": false,
+          "sun_in_chain": false,
+          "jupiter_in_chain": true,
+          "mars_in_chain": false,
+          "rahu_or_ketu_in_chain": true,
+          "any_nak_lord_relevant": true,
+          "n_nak_lord_roles": 3,
+          "saturn_over_natal_sun": false,
+          "sade_sati": false,
+          "ashtama_shani": false,
+          "kantaka_shani": true,
+          "md_roles": [
+            "domain_karaka",
+            "eighth_from_target"
+          ],
+          "ad_roles": [
+            "rotated_lord"
+          ],
+          "pad_roles": [],
+          "n_md_roles": 2,
+          "n_ad_roles": 1,
+          "n_pad_roles": 0,
+          "n_max_level_roles": 2,
+          "chain_lord_in_mrityu_bhaga": false,
+          "n_chain_in_mrityu_bhaga": 0,
+          "jupiter_well_placed_in_chain": true,
+          "jupiter_safe_protective": false,
+          "mars_over_natal_sun": false,
+          "mars_8h_from_moon": false,
+          "mars_saturn_conjunction_transit": false,
+          "saturn_transit_9h_from_moon": false,
+          "malefic_saturn_with_maraka_chain": false,
+          "saturn_in_father_critical_nakshatra": true,
+          "reason": "chain=partial (2/3) roles(3): domain_karaka,eighth_from_target,rotated_lord",
+          "saturn_transit_target": false,
+          "jupiter_transit_target": true,
+          "mars_transit_target": true
+        },
+        "by_level": {
+          "MD": null,
+          "AD": null,
+          "PAD": {
+            "level": "PAD",
+            "md": "Moon",
+            "ad": "Jupiter",
+            "pad": "Rahu",
+            "start": "1937-08-08T00:00:00",
+            "end": "1937-10-20T00:00:00",
+            "matched_lords": [
+              "Jupiter",
+              "Moon"
+            ],
+            "lord_roles_present": [
+              "domain_karaka",
+              "eighth_from_target",
+              "rotated_lord"
+            ],
+            "n_distinct_roles": 3,
+            "chain_strength": "partial",
+            "chain_lord_in_8h": false,
+            "chain_lord_in_12h": false,
+            "chain_lord_in_dusthana": false,
+            "chain_lord_in_8h_from_target": true,
+            "n_malefics_in_chain": 1,
+            "n_benefics_in_chain": 2,
+            "n_debilitated_in_chain": 0,
+            "n_combust_in_chain": 0,
+            "md_pad_same_planet": false,
+            "md_ad_same_planet": false,
+            "window_duration_days": 73,
+            "window_short": false,
+            "window_long": false,
+            "saturn_in_chain": false,
+            "sun_in_chain": false,
+            "jupiter_in_chain": true,
+            "mars_in_chain": false,
+            "rahu_or_ketu_in_chain": true,
+            "any_nak_lord_relevant": true,
+            "n_nak_lord_roles": 3,
+            "saturn_over_natal_sun": false,
+            "sade_sati": false,
+            "ashtama_shani": false,
+            "kantaka_shani": true,
+            "md_roles": [
+              "domain_karaka",
+              "eighth_from_target"
+            ],
+            "ad_roles": [
+              "rotated_lord"
+            ],
+            "pad_roles": [],
+            "n_md_roles": 2,
+            "n_ad_roles": 1,
+            "n_pad_roles": 0,
+            "n_max_level_roles": 2,
+            "chain_lord_in_mrityu_bhaga": false,
+            "n_chain_in_mrityu_bhaga": 0,
+            "jupiter_well_placed_in_chain": true,
+            "jupiter_safe_protective": false,
+            "mars_over_natal_sun": false,
+            "mars_8h_from_moon": false,
+            "mars_saturn_conjunction_transit": false,
+            "saturn_transit_9h_from_moon": false,
+            "malefic_saturn_with_maraka_chain": false,
+            "saturn_in_father_critical_nakshatra": true,
+            "reason": "chain=partial (2/3) roles(3): domain_karaka,eighth_from_target,rotated_lord",
+            "saturn_transit_target": false,
+            "jupiter_transit_target": true,
+            "mars_transit_target": true
+          },
+          "SD": null
+        }
+      },
+      "n_candidates_total": 773
+    },
+    "jaimini": {
+      "resolved": {
+        "target_house_rotated": 4,
+        "target_house_direct": 9,
+        "relevant_houses": [
+          4,
+          9
+        ],
+        "relation_karakas": [
+          "Sun"
+        ],
+        "domain_karakas": [
+          "Saturn",
+          "8L"
+        ],
+        "jaimini_karakas": [
+          "PiK"
+        ]
+      },
+      "chart_static": {
+        "primary_house_data": {
+          "rotated": {
+            "house": 4,
+            "sign_num": 9,
+            "occupants": [
+              "Moon",
+              "Jupiter"
+            ]
+          },
+          "direct": {
+            "house": 9,
+            "sign_num": 2,
+            "occupants": []
+          },
+          "argala": {
+            "argala_houses": [
+              5,
+              11,
+              2
+            ],
+            "virodhargala_houses": [],
+            "argala_benefic_planets": [],
+            "argala_malefic_planets": [
+              "Ketu",
+              "Rahu",
+              "Saturn"
+            ],
+            "net_argala_polarity": "malefic"
+          },
+          "arudha_target_rotated_sign": 6,
+          "arudha_target_direct_sign": 10
+        },
+        "karaka_data": {
+          "AK": {
+            "planet": "Moon",
+            "sign": "Sagittarius",
+            "house": 4,
+            "dignity": "neutral",
+            "eighth_from_sign_num": 11
+          },
+          "AmK": {
+            "planet": "Jupiter",
+            "sign": "Sagittarius",
+            "house": 4,
+            "dignity": "own",
+            "eighth_from_sign_num": 11
+          },
+          "BK": {
+            "planet": "Mars",
+            "sign": "Leo",
+            "house": 12,
+            "dignity": "friend",
+            "eighth_from_sign_num": 7
+          },
+          "MK": {
+            "planet": "Venus",
+            "sign": "Virgo",
+            "house": 1,
+            "dignity": "debilitated",
+            "eighth_from_sign_num": 8
+          },
+          "PuK": {
+            "planet": "Saturn",
+            "sign": "Libra",
+            "house": 2,
+            "dignity": "exalted",
+            "eighth_from_sign_num": 9
+          },
+          "GK": {
+            "planet": "Sun",
+            "sign": "Leo",
+            "house": 12,
+            "dignity": "own",
+            "eighth_from_sign_num": 7
+          },
+          "DK": {
+            "planet": "Mercury",
+            "sign": "Leo",
+            "house": 12,
+            "dignity": "friend",
+            "eighth_from_sign_num": 7
+          }
+        },
+        "jaimini_features": {
+          "relation_karaka_code": "PiK",
+          "relation_karaka_planet": null,
+          "atmakaraka": "Moon",
+          "karakamsha_d9_sign": "Scorpio",
+          "karakamsha_d9_house": 5,
+          "karakamsha_house": 4
+        }
+      },
+      "death_window": {
+        "leaf": null,
+        "by_level": {
+          "MD": null,
+          "AD": null,
+          "PAD": null,
+          "SD": null
+        }
+      },
+      "n_candidates_total": 0
+    },
+    "kp": {
+      "resolved": {
+        "target_house_rotated": 4,
+        "target_house_direct": 9,
+        "relevant_houses": [
+          4,
+          9
+        ],
+        "relation_karakas": [
+          "Sun"
+        ],
+        "domain_karakas": [
+          "Saturn",
+          "8L"
+        ],
+        "jaimini_karakas": [
+          "PiK"
+        ]
+      },
+      "chart_static": {
+        "primary_house_data": {
+          "rotated": {
+            "house": 4,
+            "csl": "Saturn",
+            "csl_signifies": [
+              10,
+              2,
+              5,
+              6,
+              4,
+              11
+            ],
+            "csl_signifies_negative_cluster": true
+          },
+          "direct": {
+            "house": 9,
+            "csl": "Saturn",
+            "csl_signifies": [
+              10,
+              2,
+              5,
+              6,
+              4,
+              11
+            ],
+            "csl_signifies_negative_cluster": true
+          },
+          "relevant_houses": [
+            3,
+            4,
+            5,
+            8,
+            10
+          ],
+          "signifiers_of_cluster": [
+            "Jupiter",
+            "Ketu",
+            "Mercury",
+            "Moon",
+            "Neptune",
+            "Pluto",
+            "Rahu",
+            "Saturn",
+            "Uranus",
+            "Venus"
+          ]
+        },
+        "karaka_data": {
+          "Saturn": {
+            "planet": "Saturn",
+            "star_lord": "Rahu",
+            "sub_lord": "Venus",
+            "sub_lord_star_lord": "Moon",
+            "placidus_house": 2,
+            "significators": [
+              10,
+              2,
+              5,
+              6,
+              4,
+              11
+            ]
+          },
+          "Sun": {
+            "planet": "Sun",
+            "star_lord": "Venus",
+            "sub_lord": "Venus",
+            "sub_lord_star_lord": "Moon",
+            "placidus_house": 11,
+            "significators": [
+              12,
+              11,
+              2,
+              9,
+              4
+            ]
+          }
+        },
+        "kp_features": {
+          "relevant_houses": [
+            3,
+            4,
+            5,
+            8,
+            10
+          ],
+          "signifiers_of_cluster": [
+            "Jupiter",
+            "Ketu",
+            "Mercury",
+            "Moon",
+            "Neptune",
+            "Pluto",
+            "Rahu",
+            "Saturn",
+            "Uranus",
+            "Venus"
+          ]
+        }
+      },
+      "death_window": {
+        "leaf": {
+          "level": "PAD",
+          "md": "Moon",
+          "ad": "Jupiter",
+          "pad": "Rahu",
+          "start": "1937-08-08T00:00:00",
+          "end": "1937-10-20T00:00:00",
+          "all_signify": true,
+          "signifying_lords": [
+            "Jupiter",
+            "Moon",
+            "Rahu"
+          ],
+          "reason": "DBA chain fully signifies target cluster"
+        },
+        "by_level": {
+          "MD": null,
+          "AD": null,
+          "PAD": {
+            "level": "PAD",
+            "md": "Moon",
+            "ad": "Jupiter",
+            "pad": "Rahu",
+            "start": "1937-08-08T00:00:00",
+            "end": "1937-10-20T00:00:00",
+            "all_signify": true,
+            "signifying_lords": [
+              "Jupiter",
+              "Moon",
+              "Rahu"
+            ],
+            "reason": "DBA chain fully signifies target cluster"
+          },
+          "SD": null
+        }
+      },
+      "n_candidates_total": 384
+    }
+  }
+}

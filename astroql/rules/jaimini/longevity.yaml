@@ -1,0 +1,127 @@
+- rule_id: jaimini.longevity.atmakaraka_afflicted.01
+  school: jaimini
+  source: Jaimini Sutra 1.2 — AK as longevity indicator
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.AK.dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+    - enemy
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - atmakaraka
+  - longevity
+  - jaimini
+  priority_tier: 2
+- rule_id: jaimini.longevity.ak_in_dusthana.01
+  school: jaimini
+  source: Jaimini — Atmakaraka in dusthana
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.AK.house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.45
+  confidence: 0.45
+  tags:
+  - atmakaraka
+  - dusthana
+  - jaimini
+  priority_tier: 2
+- rule_id: jaimini.longevity.gk_in_target_direct.01
+  school: jaimini
+  source: Jaimini — Gnatikaraka in relation's house
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - father
+    - mother
+    - spouse
+    - children
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.direct.occupants
+    op: contains
+    value_expr: karaka_data.GK.planet
+  consequent:
+    polarity: negative
+    strength: 0.4
+    timing_hint: GK signifies maraka-like karma for the relation
+  confidence: 0.4
+  tags:
+  - gnatikaraka
+  - direct
+  - jaimini
+  priority_tier: 2
+- rule_id: jaimini.longevity.bk_in_target.01
+  school: jaimini
+  source: Jaimini — Bhratrukaraka in target house
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.BK.house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.35
+  confidence: 0.35
+  tags:
+  - bhratrukaraka
+  - dusthana
+  - jaimini
+  priority_tier: 2

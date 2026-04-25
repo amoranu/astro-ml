@@ -1,0 +1,56 @@
+- rule_id: jaimini.career.amk_strong.01
+  school: jaimini
+  source: Jaimini Sutra - AmK (Amatyakaraka) as career karaka
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - magnitude
+    - event_positive
+  antecedent:
+  - feature: karaka_data.AmK.dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - amatyakaraka
+  - career
+  - jaimini
+  priority_tier: 2
+- rule_id: jaimini.career.amk_dusthana.01
+  school: jaimini
+  source: Jaimini - AmK afflicted reduces professional success
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - career
+    effects:
+    - magnitude
+    - event_negative
+  antecedent:
+  - feature: karaka_data.AmK.house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.45
+  confidence: 0.45
+  tags:
+  - amatyakaraka
+  - dusthana
+  - jaimini
+  priority_tier: 2

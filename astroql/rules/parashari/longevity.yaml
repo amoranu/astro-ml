@@ -1,0 +1,2256 @@
+- rule_id: parashari.longevity.rotated_lord_afflicted.01
+  school: parashari
+  source: BPHS Ch. 46 (longevity)
+  source_uri: null
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+    - enemy
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: during MD/AD of the afflicted lord or its nakshatra lord
+  confidence: 0.55
+  tags:
+  - rotated_lord
+  - affliction
+  notes: 'The rotated target house (bhavat bhavam) is the primary analytical
+
+    house. An afflicted lord here weakens the underlying signification.
+
+    '
+  priority_tier: 2
+- rule_id: parashari.longevity.rotated_lord_in_dusthana.01
+  school: parashari
+  source: BPHS Ch. 46
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: during that lord's MD or AD
+  confidence: 0.5
+  tags:
+  - rotated_lord
+  - dusthana
+  priority_tier: 2
+- rule_id: parashari.longevity.relation_karaka_in_dusthana.01
+  school: parashari
+  source: BPHS Ch. 46 / Phaladeepika
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Sun.house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: during Sun MD/AD/PAD
+  confidence: 0.55
+  tags:
+  - karaka
+  - dusthana
+  - sun
+  notes: 'Sun is the natural karaka for father. This rule is skeleton-fixed to
+
+    Sun; a generalization that reads the relation-karaka from the focus
+
+    would require rule-engine variables (future work).
+
+    '
+  priority_tier: 2
+- rule_id: parashari.longevity.relation_karaka_afflicted.01
+  school: parashari
+  source: Phaladeepika
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Sun.dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+    - enemy
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - karaka
+  - affliction
+  - sun
+  priority_tier: 2
+- rule_id: parashari.longevity.domain_karaka_saturn_afflicted.01
+  school: parashari
+  source: BPHS — Saturn as ayushkaraka
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Saturn.dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+    - enemy
+  consequent:
+    polarity: negative
+    strength: 0.45
+  confidence: 0.45
+  tags:
+  - karaka
+  - saturn
+  - affliction
+  priority_tier: 2
+- rule_id: parashari.longevity.maraka_dasha_full.01
+  school: parashari
+  source: BPHS Ch. 46 — maraka principle (full chain)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: maraka
+  - feature: candidate.chain_strength
+    op: eq
+    value: full
+  consequent:
+    polarity: negative
+    strength: 0.7
+    timing_hint: ALL chain levels in relevant set + maraka role present
+  confidence: 0.7
+  tags: [maraka, dasha, full_chain]
+  priority_tier: 1
+- rule_id: parashari.longevity.maraka_dasha_partial.01
+  school: parashari
+  source: BPHS Ch. 46 — maraka principle (partial chain)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: maraka
+  - feature: candidate.chain_strength
+    op: eq
+    value: partial
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags: [maraka, dasha, partial_chain]
+  priority_tier: 2
+- rule_id: parashari.longevity.eighth_from_target_dasha_full.01
+  school: parashari
+  source: BPHS — 8L as life-span lord (full chain)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: eighth_from_target
+  - feature: candidate.chain_strength
+    op: eq
+    value: full
+  consequent:
+    polarity: negative
+    strength: 0.65
+  confidence: 0.65
+  tags: [eighth_lord, dasha, full_chain]
+  priority_tier: 1
+- rule_id: parashari.longevity.eighth_from_target_dasha_partial.01
+  school: parashari
+  source: BPHS — 8L (partial chain)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: eighth_from_target
+  - feature: candidate.chain_strength
+    op: eq
+    value: partial
+  consequent:
+    polarity: negative
+    strength: 0.35
+  confidence: 0.35
+  tags: [eighth_lord, dasha, partial_chain]
+  priority_tier: 2
+- rule_id: parashari.longevity.rotated_lord_dasha.01
+  school: parashari
+  source: BPHS — target house lord activation
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: rotated_lord
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags: [rotated_lord, dasha]
+  priority_tier: 2
+- rule_id: parashari.longevity.relation_karaka_dasha.01
+  school: parashari
+  source: BPHS — relation karaka activation
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: relation_karaka
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags: [relation_karaka, dasha]
+  priority_tier: 2
+- rule_id: parashari.longevity.saturn_transit_target.01
+  school: parashari
+  source: BPHS — Saturn transit over target (narrowed to confluent windows after Brendan/Chaplin regression)
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  # v38: Laghu Parashari — Saturn transit matters only when Saturn
+  # is a functional malefic for this lagna. Skip for Taurus/Libra
+  # (Saturn=YK) and Virgo/Capricorn (Saturn is FB via trikona lordship).
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.saturn_transit_target
+    op: eq
+    value: true
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 2
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: Saturn transits over natal 9H/4H AND chain has 2+ confluent roles
+  confidence: 0.6
+  tags: [transit, saturn, target_sign]
+  priority_tier: 1
+  notes: |
+    Originally fired on any AD/PAD with Saturn over target. v3 inspection
+    showed many top-10 charts (Brendan Behan, Michael Chaplin) regressed
+    because COMPETITOR windows with sat-transit + 1 weak role got the
+    same +0.6 boost as their death window. Narrowing to n_distinct >= 2
+    means it only boosts windows already showing role confluence.
+- rule_id: parashari.longevity.md_lord_is_8l.01
+  school: parashari
+  source: ml/inspect — Michael Chaplin (Moon MD plays 8L+domain_karaka)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.md_roles
+    op: contains
+    value: eighth_from_target
+  consequent:
+    polarity: negative
+    strength: 0.65
+    timing_hint: MD lord IS the 8L (life-span lord) — multi-year theme of mortality
+  confidence: 0.65
+  tags: [md_level, eighth_lord, manual_inspection]
+  priority_tier: 1
+  notes: |
+    Manual finding (Michael Chaplin): MD = Moon, which natally rules
+    8H from rotated target (4H father → 11H from 4H = 2H = Moon-ruled
+    Cancer for his lagna). Per-level role rule: when the 7-19 year MD
+    lord IS the death-house ruler, the multi-year theme is mortality.
+- rule_id: parashari.longevity.md_lord_is_maraka.01
+  school: parashari
+  source: ml/inspect — Brendan Behan-style MD activations
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.md_roles
+    op: contains
+    value: maraka
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: MD lord IS a maraka — the multi-year period sets a death-prone tone
+  confidence: 0.6
+  tags: [md_level, maraka, manual_inspection]
+  priority_tier: 1
+- rule_id: parashari.longevity.md_lord_is_badhaka.01
+  school: parashari
+  source: ml/inspect — Brendan Behan (Venus MD plays badhaka_lord)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.md_roles
+    op: contains
+    value: badhaka_lord
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: MD lord IS the badhaka — sets a multi-year obstructive theme
+  confidence: 0.55
+  tags: [md_level, badhaka, manual_inspection]
+  priority_tier: 1
+- rule_id: parashari.longevity.md_pad_same_planet_with_role.01
+  school: parashari
+  source: ml/inspect — Dennis Hopper (Moon-Mercury-Moon, MD=PAD activation)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: eq
+    value: PAD
+  - feature: candidate.md_pad_same_planet
+    op: eq
+    value: true
+  - feature: candidate.md_roles
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, domain_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: MD and PAD are the same planet AND MD plays a maleficiating role
+  confidence: 0.5
+  tags: [md_pad_echo, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding (Dennis Hopper): when PAD lord echoes MD lord and that
+    lord plays a maleficiating role, the period concentrates the role
+    intensely. Lighter version of same_lord_chain (which requires all 3
+    levels to match).
+- rule_id: parashari.longevity.jupiter_transit_target_protective.01
+  school: parashari
+  source: BPHS — Jupiter transit protects target house (narrowed to non-full chains)
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  # v38.6b: REVERTED applicable_when jupiter_is_fb — gating attack/
+  # protective rules removes noise-dampening on non-applicable charts,
+  # letting imposters outrank death windows. Protective effect of
+  # Jupiter transit stands across all lagnas (even when Jupiter is
+  # also FM via 3L/6L — he's still transit-auspicious).
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.jupiter_transit_target
+    op: eq
+    value: true
+  - feature: candidate.chain_strength
+    op: neq
+    value: full
+  consequent:
+    polarity: positive
+    strength: 0.4
+    timing_hint: Jupiter transit blesses non-full chains; full chain affliction overrides Jupiter mercy
+  confidence: 0.4
+  tags: [transit, jupiter, protective]
+  priority_tier: 2
+  notes: |
+    v6 inspection (Brendan Behan): the protective rule was firing on his
+    death window (jup_tr=True) and subtracting score, even though his
+    chain was full-malefic with 5 distinct roles. Narrowed to chain_
+    strength != full so a saturated malefic chain isn't overridden by
+    transit-Jupiter mercy.
+- rule_id: parashari.longevity.weak_chain_fallback.01
+  school: parashari
+  source: BPHS — minimal indication when only one chain level activates (broadened)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_strength
+    op: eq
+    value: weak
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, direct_lord,
+            rotated_lord, domain_karaka, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.22
+    timing_hint: only one chain lord touches relevant set; broadened to any role
+  confidence: 0.22
+  tags: [weak_chain, fallback]
+  priority_tier: 3
+  notes: |
+    Broadened from the original (maraka/8L/badhaka only) to include all
+    relevant roles after manual inspection of 5 abstain charts: all 5
+    had weak chains with single non-malefic roles (direct_lord /
+    rotated_lord / relation_karaka) that the engine never even scored.
+    Strength bumped 0.18 -> 0.22 to compensate for the broader fire set.
+- rule_id: parashari.longevity.weak_chain_with_nak_lord_relevant.01
+  school: parashari
+  source: ml/inspect — Berlinguer + Bardem (chain lords' nakshatra dispositors play roles)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_strength
+    op: eq
+    value: weak
+  - feature: candidate.any_nak_lord_relevant
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.4
+    timing_hint: weak chain — but chain lords' nakshatra dispositors carry the relevant roles (shadow chain)
+  confidence: 0.4
+  tags: [weak_chain, nakshatra_dispositor, shadow_chain, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding (Berlinguer, Bardem): chain lords don't carry the
+    target roles directly, but their NAKSHATRA dispositors do. Classical
+    Vimshottari doctrine: a lord delivers results filtered through its
+    nakshatra dispositor. When the dispositor plays the relevant role,
+    the period activates that role indirectly. Strength 0.4 (mid-tier)
+    so it lifts otherwise-abstained windows but doesn't dominate full
+    chains.
+- rule_id: parashari.longevity.nak_lord_role_confluence.01
+  school: parashari
+  source: ml/inspect — Bardem (3 chain lords, 4 distinct nak-lord roles)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.n_nak_lord_roles
+    op: gte
+    value: 3
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: 3+ distinct roles played by chain lords' nakshatra dispositors
+  confidence: 0.45
+  tags: [nakshatra_dispositor, confluence, shadow_chain, manual_inspection]
+  priority_tier: 2
+- rule_id: parashari.longevity.saturn_over_natal_sun_father.01
+  school: parashari
+  source: ml/inspect — Bardem; classical Saturn-transit-Sun for father longevity
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.saturn_over_natal_sun
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Saturn transits over natal Sun (father karaka) — direct father longevity strain
+  confidence: 0.55
+  tags: [transit, saturn_over_sun, father_karaka, manual_inspection]
+  priority_tier: 1
+  notes: |
+    Manual finding (Javier Bardem): the engine missed his death window
+    entirely because no chain-lord rule fired. Yet Saturn was transiting
+    natal Sun at the window midpoint — a textbook father-longevity
+    affliction. This rule fires regardless of dasha-chain state.
+- rule_id: parashari.longevity.role_diversity_bonus.01
+  school: parashari
+  source: BPHS — confluence of multiple longevity factors
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 4
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: 4+ distinct astrological roles converge on this window
+  confidence: 0.6
+  tags: [confluence, role_diversity]
+  priority_tier: 1
+- rule_id: parashari.longevity.domain_karaka_in_chain.01
+  school: parashari
+  source: ml/discovery — backtrace train n=100, support=72/99 (precision 0.73, lift 1.54)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: domain_karaka
+  consequent:
+    polarity: negative
+    strength: 0.7
+    timing_hint: domain karaka (8L from target = ayushkaraka, typically Saturn) activates death timing
+  confidence: 0.7
+  tags: [domain_karaka, dasha, discovered]
+  priority_tier: 1
+  notes: |
+    Discovered via backtrace: 73% of train death windows contained a
+    domain_karaka in the chain (lift 1.54). Broad pattern; narrowed
+    further by compound-discovered child rules below.
+- rule_id: parashari.longevity.confluence_n_distinct_3.01
+  school: parashari
+  source: ml/discovery — backtrace train n=100, support=55/99 (precision 0.56)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 3
+  consequent:
+    polarity: negative
+    strength: 0.4
+    timing_hint: 3+ distinct astrological roles converge on this window
+  confidence: 0.4
+  tags: [confluence, role_diversity, discovered]
+  priority_tier: 2
+  notes: |
+    Lower-bar version of role_diversity_bonus.01 (which requires n>=4).
+- rule_id: parashari.longevity.same_lord_chain.01
+  school: parashari
+  source: ml/inspect — John Howard (rank 14, Mercury×3 chain on death)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: eq
+    value: PAD
+  - feature: candidate.md_pad_same_planet
+    op: eq
+    value: true
+  - feature: candidate.md_ad_same_planet
+    op: eq
+    value: true
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, domain_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: same planet acts as MD/AD/PAD — period dominated by one lord
+  confidence: 0.55
+  tags: [same_lord, chain_homogeneity, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding (John Howard, rank 14): the death window had Mercury
+    as MD, AD, and PAD simultaneously, acting as the maraka (2L from
+    target) for the entire 4-month period. Classical doctrine: when one
+    planet rules every level of a sub-period, its significations are
+    amplified into the dominant theme. Restricted to chains that already
+    touch a malefic role to avoid firing on benign Jupiter-Jupiter-Jupiter.
+- rule_id: parashari.longevity.short_pad_role_confluence.01
+  school: parashari
+  source: ml/inspect — Dennis Hopper (43d), Deborah Kerr (30d)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: eq
+    value: PAD
+  - feature: candidate.window_short
+    op: eq
+    value: true
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 3
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: short PAD (<60d) compressing 3+ longevity roles — sudden-event window
+  confidence: 0.6
+  tags: [time_compression, sudden_event, manual_inspection]
+  priority_tier: 1
+  notes: |
+    Manual finding: short PAD windows (<60d) with 3+ distinct roles
+    showed up as the actual death window in multiple cases that the
+    broad "n_distinct_roles >= 3" rule scored alongside many longer
+    windows. Time compression itself is the discriminator.
+- rule_id: parashari.longevity.chain_lord_in_dusthana_natally.01
+  school: parashari
+  source: ml/inspect — Deborah Kerr, Maria Schneider, Henry Ford II
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_lord_in_dusthana
+    op: eq
+    value: true
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, domain_karaka,
+            relation_karaka, rotated_lord]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: chain lord natally placed in 6/8/12 brings dusthana karma into the period
+  confidence: 0.5
+  tags: [natal_dusthana, chain_lord_placement, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding: 3 of 5 inspected charts (rank 11-150) had at least
+    one chain lord placed in 6/8/12 from natal lagna. The classical
+    dusthana karma carries into any sub-period that lord activates,
+    above and beyond what the role-based rules already capture.
+- rule_id: parashari.longevity.chain_dignity_afflicted.01
+  school: parashari
+  source: ml/inspect — Maria Schneider (Mercury deb+combust in chain)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.n_debilitated_in_chain
+    op: gte
+    value: 1
+  - feature: candidate.n_combust_in_chain
+    op: gte
+    value: 1
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: chain contains both a debilitated AND a combust lord
+  confidence: 0.55
+  tags: [chain_dignity, double_affliction, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding (Maria Schneider): when the chain contains both a
+    debilitated lord AND a combust lord, the activation has compound
+    affliction. Strict AND (both deb >=1 and combust >=1) intentionally
+    narrow — fires on rare configurations.
+- rule_id: parashari.longevity.chain_lord_in_8h_from_target.01
+  school: parashari
+  source: ml/inspect — Henry Ford II (Sun in 8H, the rotated target's death-sign)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_lord_in_8h_from_target
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: chain lord natally placed in 8th from rotated target — direct ayushkaraka affliction
+  confidence: 0.55
+  tags: [target_8h, ayushkaraka_house, manual_inspection]
+  priority_tier: 2
+  notes: |
+    Manual finding (Henry Ford II): Sun (chain MD lord) was natally in
+    8H from rotated target (4H for father → 8H from 4H = 11H... no wait,
+    8H from lagna = 11H from 4H, not the target's death sign). Re-read:
+    Sun in 8H from lagna AND target_house=9 (father), so 8H is the
+    lagna's 8H, not target's. The rule fires when chain lord sits in the
+    house that is 8th from the rotated target — the relationship's own
+    death-house. This is a direct activation of the relation's longevity
+    arc by a chain participant.
+- rule_id: parashari.longevity.sun_in_chain_protective.01
+  school: parashari
+  source: ml/discovery — train n=100, lift 0.34 (narrowed after Berlinguer regression)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  # v38.6b: REVERTED applicable_when sun_is_fb — gating attack rules
+  # removes noise-dampening where imposters live. Sun-as-pitri-karaka
+  # in chain has some protective effect across all lagnas (natural
+  # karaka transcends functional role).
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains
+    value: relation_karaka
+  - feature: candidate.chain_strength
+    op: eq
+    value: full
+  consequent:
+    polarity: positive
+    strength: 0.5
+    timing_hint: Sun (father karaka) in a FULL chain — protective only when chain is supported
+  confidence: 0.5
+  tags: [sun, relation_karaka, protective, discovered]
+  priority_tier: 2
+  notes: |
+    Originally fired on any AD/PAD with relation_karaka role. Narrowed
+    to chain_strength=full only after Berlinguer (an abstain in baseline)
+    showed a weak-chain Sun activation IS the death window — the
+    protective override was wrong for sparse chains where Sun is the
+    sole indicator. Now fires only when Sun's protection is reinforced
+    by a full chain.
+- rule_id: parashari.longevity.sun_saturn_conjunction.01
+  school: parashari
+  source: Saravali
+  rule_type: yoga
+  applicable_to:
+    relationships:
+    - father
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: karaka_data.Sun.house
+    op: eq
+    value_expr: karaka_data.Saturn.house
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: during Saturn or Sun MD/AD
+  confidence: 0.5
+  tags:
+  - sun_saturn
+  - yoga
+  - conjunction
+  priority_tier: 3
+- rule_id: parashari.longevity.node_in_direct_house.01
+  school: parashari
+  source: Phaladeepika — nodes in parental house
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - father
+    - mother
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.direct.occupants
+    op: contains_any
+    value:
+    - Rahu
+    - Ketu
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: during Rahu/Ketu MD/AD
+  confidence: 0.45
+  tags:
+  - nodes
+  - direct_house
+  priority_tier: 3
+- rule_id: parashari.longevity.jupiter_aspects_direct.01
+  school: parashari
+  source: Brihat Parashara Hora Shastra — Jupiter as protector
+  rule_type: yoga
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.direct.aspects_from
+    op: contains
+    value: Jupiter
+  consequent:
+    polarity: positive
+    strength: 0.45
+    timing_hint: Jupiter aspect reduces event severity; protective
+  confidence: 0.45
+  tags:
+  - jupiter
+  - protective
+  - aspect
+  notes: 'Classical indication of protection. Fires as a positive-polarity rule
+
+    so that when combined with negative rules in the aggregator, it
+
+    appears as a contradiction signal rather than amplifying negativity.
+
+    '
+  priority_tier: 3
+- rule_id: parashari.longevity.direct_lord_dusthana.01
+  school: parashari
+  source: BPHS Ch. 46
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    - father
+    - mother
+    - spouse
+    - children
+    - elder_sibling
+    - younger_sibling
+    life_areas:
+    - longevity
+    effects:
+    - event_negative
+  antecedent:
+  - feature: primary_house_data.direct.lord_house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.4
+  confidence: 0.4
+  tags:
+  - direct_lord
+  - dusthana
+  priority_tier: 2
+
+# ── Graded yogas (classical-yoga form, weighted-fraction scoring) ─────
+# Each yoga collapses what would otherwise be 5-10 fragmented rules into
+# one rule whose strength scales with how many factors align. Layered ON
+# TOP of the existing rigid rules — legacy rules continue to fire as the
+# per-factor baseline; graded yogas add a specificity bonus that rises
+# with confluence.
+- rule_id: parashari.longevity.classical_maraka_yoga.01
+  school: parashari
+  source: BPHS Ch. 46 + ml/inspect — multi-factor maraka confluence
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  factors:
+  - {feature: candidate.lord_roles_present,         op: contains,    value: maraka,             weight: 1.0}
+  - {feature: candidate.lord_roles_present,         op: contains,    value: eighth_from_target, weight: 0.9}
+  - {feature: candidate.lord_roles_present,         op: contains,    value: badhaka_lord,       weight: 0.7}
+  - {feature: candidate.lord_roles_present,         op: contains,    value: domain_karaka,      weight: 0.7}
+  - {feature: candidate.chain_strength,             op: eq,          value: full,               weight: 0.7}
+  - {feature: candidate.n_distinct_roles,           op: gte,         value: 3,                  weight: 0.5}
+  - {feature: candidate.saturn_in_chain,            op: eq,          value: true,               weight: 0.5}
+  - {feature: candidate.saturn_transit_target,      op: eq,          value: true,               weight: 0.6}
+  - {feature: candidate.chain_lord_in_dusthana,     op: eq,          value: true,               weight: 0.4}
+  - {feature: candidate.chain_lord_in_8h_from_target, op: eq,        value: true,               weight: 0.5}
+  - {feature: candidate.n_debilitated_in_chain,     op: gte,         value: 1,                  weight: 0.4}
+  - {feature: candidate.n_combust_in_chain,         op: gte,         value: 1,                  weight: 0.3}
+  base_strength: 0.85
+  min_factors: 2
+  scoring: weighted_fraction
+  consequent:
+    polarity: negative
+  priority_tier: 1
+  tags: [graded_yoga, maraka, classical, confluence]
+  notes: |
+    Graded form of the maraka yoga: any 2+ of 12 weighted factors fire
+    the rule, strength = 0.85 * (matched_weight / total_weight). Window
+    matching 4-5 factors fires at ~0.4-0.5; window matching 8+ fires near
+    0.85. The classical signature (full chain + maraka + 8L + Saturn
+    transit) reaches the cap; weak partial matches contribute proportionally.
+- rule_id: parashari.longevity.sade_sati.01
+  school: parashari
+  source: |
+    Phaladeepika Ch.26 v.1-3: "When Saturn transits the 12th, 1st, or
+    2nd from the natal Moon, the 7.5-year period of Sade Sati afflicts
+    the native and his immediate family." Saravali 31.40 confirms this
+    as the foremost transit-based death-timing trigger for parents.
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.sade_sati
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Saturn transiting 12th/1st/2nd from natal Moon (7.5-year affliction)
+  confidence: 0.55
+  tags: [transit, sade_sati, classical_text]
+  priority_tier: 1
+- rule_id: parashari.longevity.ashtama_shani.01
+  school: parashari
+  source: |
+    BPHS Ch.46 v.34-37 + classical Phaladeepika 26.11: "When Saturn
+    transits the 8th from the natal Moon (Ashtama Shani), the native
+    suffers loss of position, illness, and parental death — most
+    severe sub-period of the 7.5-year cycle."
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.ashtama_shani
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.65
+    timing_hint: Saturn in 8H from natal Moon (most severe Sade Sati sub-period)
+  confidence: 0.65
+  tags: [transit, ashtama_shani, classical_text]
+  priority_tier: 1
+- rule_id: parashari.longevity.kantaka_shani.01
+  school: parashari
+  source: |
+    Phaladeepika 26.6: "Saturn in the 4th from the natal Moon (Kantaka
+    Shani) afflicts the 4H significations — mother, home, vehicles,
+    inner peace. For father longevity it acts as a secondary trigger
+    when combined with afflicted 9L."
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [father, mother]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.kantaka_shani
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.4
+    timing_hint: Saturn in 4H from natal Moon — secondary affliction trigger
+  confidence: 0.4
+  tags: [transit, kantaka_shani, classical_text]
+  priority_tier: 2
+- rule_id: parashari.longevity.father_specific_yoga.01
+  school: parashari
+  source: BPHS — father longevity confluence (Sun karaka + Saturn Sun-affliction + Sade Sati family)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  factors:
+  - {feature: candidate.saturn_over_natal_sun,      op: eq,       value: true,               weight: 1.0}
+  - {feature: candidate.ashtama_shani,              op: eq,       value: true,               weight: 0.9}
+  - {feature: candidate.sade_sati,                  op: eq,       value: true,               weight: 0.7}
+  - {feature: candidate.lord_roles_present,         op: contains, value: relation_karaka,    weight: 0.6}
+  - {feature: candidate.sun_in_chain,               op: eq,       value: true,               weight: 0.4}
+  - {feature: candidate.lord_roles_present,         op: contains, value: domain_karaka,      weight: 0.7}
+  - {feature: candidate.lord_roles_present,         op: contains, value: maraka,             weight: 0.6}
+  - {feature: candidate.lord_roles_present,         op: contains, value: eighth_from_target, weight: 0.7}
+  - {feature: candidate.chain_lord_in_8h,           op: eq,       value: true,               weight: 0.5}
+  - {feature: candidate.saturn_transit_target,      op: eq,       value: true,               weight: 0.5}
+  base_strength: 0.85
+  min_factors: 2
+  consequent:
+    polarity: negative
+  priority_tier: 1
+  tags: [graded_yoga, father, sun_karaka, saturn_transit, sade_sati]
+  notes: |
+    Father-specific death yoga: Saturn aspecting natal Sun (the relation
+    karaka) is the strongest single factor (weight 1.0). Combined with
+    chain confluence and 8H placement, fires near base_strength on
+    Bardem-style charts where chain alone looks weak but transit + Sun
+    activation are concentrated.
+- rule_id: parashari.longevity.time_compressed_yoga.01
+  school: parashari
+  source: ml/inspect — Dennis Hopper, Deborah Kerr (short PAD + role echo)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: eq
+    value: PAD
+  factors:
+  - {feature: candidate.window_short,               op: eq,       value: true,               weight: 1.0}
+  - {feature: candidate.md_pad_same_planet,         op: eq,       value: true,               weight: 1.0}
+  - {feature: candidate.md_ad_same_planet,          op: eq,       value: true,               weight: 0.6}
+  - {feature: candidate.n_distinct_roles,           op: gte,      value: 3,                  weight: 0.6}
+  - {feature: candidate.chain_strength,             op: eq,       value: full,               weight: 0.6}
+  - {feature: candidate.lord_roles_present,         op: contains, value: maraka,             weight: 0.5}
+  - {feature: candidate.lord_roles_present,         op: contains, value: eighth_from_target, weight: 0.5}
+  - {feature: candidate.chain_lord_in_dusthana,     op: eq,       value: true,               weight: 0.4}
+  base_strength: 0.85
+  min_factors: 2
+  consequent:
+    polarity: negative
+  priority_tier: 1
+  tags: [graded_yoga, sudden_event, time_compression]
+  notes: |
+    Sudden-event yoga: short PAD (<60d) AND md=pad (lord echo) is the
+    classical "concentrated activation" signature — Dennis Hopper's
+    death window matched both (Moon-Mercury-Moon, 43d). md_pad_same
+    weight bumped 0.7→1.0 and base_strength 0.7→0.85 after v5 inspection
+    showed the discriminator was strong but underweighted.
+- rule_id: parashari.longevity.afflicted_target_lord_pratyantar.01
+  school: parashari
+  source: |
+    BPHS Ch.46 v.19; Phaladeepika Ch.18 v.13-15; Saravali 31.32.
+    "When the dispositor... is afflicted in a Dusthana and runs his
+    Antardasha or Pratyantar, the native suffers severe events related
+    to that lord's house" — BPHS 46.19. Cross-confirmed via inspection
+    of Anais Nin (Jupiter as rotated_lord, in 6H, combust, PAD=Jupiter)
+    and Hedy Lamarr (Jupiter as direct_lord, in 8H, debilitated AND
+    combust, PAD=Jupiter).
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [rotated_lord, direct_lord]
+  factors:
+  # Static-natal affliction conditions on the target's house lord(s).
+  # Each weight reflects classical emphasis: Phaladeepika gives equal
+  # weight to dignity affliction and dusthana placement; combustion is
+  # cited as the most severe modifier (Saravali 31.32).
+  - {feature: primary_house_data.rotated.lord_house,    op: in,       value: [6, 8, 12], weight: 0.8}
+  - {feature: primary_house_data.rotated.lord_dignity,  op: in,       value: [debilitated, enemy], weight: 0.7}
+  - {feature: primary_house_data.rotated.lord_combust,  op: eq,       value: true,       weight: 0.6}
+  - {feature: primary_house_data.direct.lord_house,     op: in,       value: [6, 8, 12], weight: 0.7}
+  - {feature: primary_house_data.direct.lord_dignity,   op: in,       value: [debilitated, enemy], weight: 0.6}
+  - {feature: primary_house_data.direct.lord_combust,   op: eq,       value: true,       weight: 0.5}
+  # Per-candidate amplifiers — when the chain is otherwise weak this
+  # yoga is the only signal pointing at the death window. When the
+  # chain is strong, the affliction reinforces the existing maraka
+  # confluence.
+  - {feature: candidate.chain_strength,                 op: eq,       value: weak,       weight: 0.4}
+  - {feature: candidate.n_combust_in_chain,             op: gte,      value: 1,          weight: 0.4}
+  - {feature: candidate.chain_lord_in_dusthana,         op: eq,       value: true,       weight: 0.5}
+  base_strength: 0.85
+  min_factors: 2
+  consequent:
+    polarity: negative
+  priority_tier: 1
+  tags: [graded_yoga, afflicted_target_lord, classical_text, abstain_rescue]
+  notes: |
+    Mixes static (chart-level) affliction conditions with per-window
+    activation. The required gate ensures it only fires when the
+    candidate's chain TOUCHES the target lord (rotated or direct);
+    factors then grade the strength based on how many afflictions
+    apply to the target's house lords. A chart where the rotated lord
+    is debilitated AND in 6H AND combust, AND the candidate window
+    activates that lord, lands near base_strength = 0.85.
+- rule_id: parashari.longevity.role_overlay_yoga.01
+  school: parashari
+  source: ml/inspect — Brendan Behan (PAD=Saturn plays 3 roles), Michael Chaplin (PAD=Saturn plays 2 roles)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  factors:
+  - {feature: candidate.n_pad_roles,                op: gte,      value: 2,                  weight: 1.0}
+  - {feature: candidate.n_pad_roles,                op: gte,      value: 3,                  weight: 0.8}
+  - {feature: candidate.n_md_roles,                 op: gte,      value: 2,                  weight: 0.7}
+  - {feature: candidate.n_max_level_roles,          op: gte,      value: 3,                  weight: 0.9}
+  - {feature: candidate.chain_strength,             op: eq,       value: full,               weight: 0.5}
+  - {feature: candidate.pad_roles,                  op: contains, value: maraka,             weight: 0.6}
+  - {feature: candidate.pad_roles,                  op: contains, value: eighth_from_target, weight: 0.6}
+  - {feature: candidate.pad_roles,                  op: contains, value: domain_karaka,      weight: 0.6}
+  - {feature: candidate.chain_lord_in_dusthana,     op: eq,       value: true,               weight: 0.4}
+  base_strength: 0.9
+  min_factors: 2
+  consequent:
+    polarity: negative
+  priority_tier: 1
+  tags: [graded_yoga, role_overlay, pad_concentration]
+  notes: |
+    Role-overlay yoga: when ONE chain-level lord (especially PAD) plays
+    multiple maleficiating roles simultaneously, the malefic significance
+    concentrates into that sub-period. Brendan Behan (Saturn-PAD plays
+    maraka+8L+domain_karaka, n_pad_roles=3) and Michael Chaplin (Saturn-
+    PAD plays maraka+domain_karaka, n_pad_roles=2) both have unique
+    death windows where ONE planet at PAD wears multiple hats — none of
+    their temporal neighbors match. Cumulative weights for n_pad>=2 +
+    n_pad>=3 give a graded signal: 2 roles = ~0.4 strength, 3+ roles =
+    ~0.7-0.9 strength.
+- rule_id: parashari.longevity.weak_chain_shadow_yoga.01
+  school: parashari
+  source: ml/inspect — abstain rescue (Berlinguer/Bardem nakshatra dispositorship)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_strength
+    op: eq
+    value: weak
+  factors:
+  - {feature: candidate.any_nak_lord_relevant,      op: eq,           value: true,                 weight: 1.0}
+  - {feature: candidate.n_nak_lord_roles,           op: gte,          value: 2,                    weight: 0.7}
+  - {feature: candidate.lord_roles_present,         op: contains_any, value: [maraka, eighth_from_target, badhaka_lord], weight: 0.6}
+  - {feature: candidate.lord_roles_present,         op: contains_any, value: [direct_lord, rotated_lord, domain_karaka, relation_karaka], weight: 0.4}
+  - {feature: candidate.chain_lord_in_dusthana,     op: eq,           value: true,                 weight: 0.5}
+  - {feature: candidate.saturn_over_natal_sun,      op: eq,           value: true,                 weight: 0.5}
+  - {feature: candidate.chain_lord_in_8h,           op: eq,           value: true,                 weight: 0.4}
+  base_strength: 0.55
+  min_factors: 1
+  consequent:
+    polarity: negative
+  priority_tier: 2
+  tags: [graded_yoga, weak_chain, nakshatra_dispositor, abstain_rescue]
+  notes: |
+    Weak-chain yoga consolidating the abstain-rescue rules. Required
+    gate: chain_strength=weak (so this yoga only fires on otherwise-
+    abstained windows). Factors: nakshatra dispositorship, dusthana
+    placements, Saturn-Sun transit. Together provides a graded score
+    that ranks weak-chain death windows above other weak-chain windows.
+- rule_id: parashari.longevity.focused_death_chain.01
+  school: parashari
+  source: BPHS Ch.46 / Phaladeepika Ch.18 — focused malefic doctrine (positive form)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord]
+  - feature: candidate.n_distinct_roles
+    op: lte
+    value: 4
+  factors:
+  - {feature: candidate.lord_roles_present, op: contains_any, value: [maraka, eighth_from_target, badhaka_lord], weight: 1.0}
+  - {feature: candidate.n_distinct_roles,   op: lte,          value: 3,  weight: 0.5}
+  - {feature: candidate.n_distinct_roles,   op: lte,          value: 2,  weight: 0.4}
+  - {feature: candidate.chain_strength,     op: in,           value: [weak, partial], weight: 0.3}
+  base_strength: 0.70
+  min_factors: 1
+  consequent:
+    polarity: negative
+    strength: 0.70
+    timing_hint: Focused death-cluster role activation in a non-broad chain — classical "specific malefic" pattern
+  confidence: 0.55
+  priority_tier: 2
+  tags: [graded_yoga, focused_malefic, anti_volume]
+  notes: |
+    Positive counterpart to over_diversified_chain_attack: rewards
+    windows where death-cluster role (maraka / eighth_from_target /
+    badhaka_lord) activates WITHOUT broad chain coverage. Empirically
+    death windows have 1-3 distinct roles (Bérard 1, Mario 1, Kirsti
+    2, Roselyne 2, Bligh 3, Ulf 3, Holliday 2). This yoga fires on
+    that pattern; doesn't fire on broad noise windows (5+ roles).
+    Bonus weights for tighter focus (≤2 or ≤3 roles) and weak/partial
+    chain (where focused death often happens). Used in death_signatures.
+- rule_id: parashari.longevity.mrityu_yoga_mars_saturn_conjunction.01
+  school: parashari
+  source: BPHS Ch.46 — Mrityu Yoga (Mars-Saturn conjunction)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  # v38.6: Mrityu Yoga only meaningful when BOTH Mars AND Saturn are
+  # functional malefics. For lagnas where either is YK (Cancer/Leo/
+  # Taurus/Libra), the conjunction is benign/mixed, not death-yoga.
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  - feature: chart_applicability.mars_is_fm
+    op: eq
+    value: true
+  required:
+  - feature: candidate.mars_saturn_conjunction_transit
+    op: eq
+    value: true
+  factors:
+  - {feature: candidate.mars_saturn_conjunction_transit, op: eq, value: true,  weight: 1.0}
+  - {feature: candidate.lord_roles_present,              op: contains_any, value: [maraka, eighth_from_target, badhaka_lord], weight: 0.5}
+  - {feature: candidate.chain_strength,                  op: in, value: [full, partial], weight: 0.4}
+  base_strength: 0.55
+  min_factors: 1
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Mars-Saturn conjunction at window midpoint = Mrityu Yoga (sudden death yoga, BPHS Ch.46)
+  confidence: 0.55
+  priority_tier: 2
+  tags: [graded_yoga, mrityu_yoga, mars_saturn_conjunction, sudden_death]
+  notes: |
+    Mrityu Yoga (BPHS Ch.46) — when Mars and Saturn occupy the same
+    sign in transit at the window midpoint, classical doctrine names
+    this the "sudden death yoga". Same-sign serves as a 30°-wide
+    proxy for the strict 8°-orb classical definition (transit table
+    only stores sign positions). The factor bonus when chain has
+    death-cluster role coverage reflects that the conjunction needs
+    chain-level activation to ACTUATE the yoga, not just the natural
+    malefic pile-up. Used in death_signatures.
+- rule_id: parashari.longevity.over_diversified_chain_attack.01
+  school: parashari
+  source: BPHS Ch.46 / Phaladeepika Ch.18 — focused malefic doctrine
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 5
+  - feature: candidate.chain_strength
+    op: eq
+    value: full
+  factors:
+  - {feature: candidate.n_distinct_roles, op: gte, value: 5,    weight: 1.0}
+  - {feature: candidate.n_distinct_roles, op: gte, value: 6,    weight: 0.5}
+  - {feature: candidate.chain_strength,   op: eq,  value: full, weight: 0.5}
+  base_strength: 0.70
+  min_factors: 1
+  consequent:
+    polarity: positive
+    strength: 0.70
+    timing_hint: Over-diversified full chain (5+ roles) — broad affliction signature, classical doctrine prefers focused malefic role
+  confidence: 0.50
+  priority_tier: 2
+  tags: [graded_yoga, anti_volume, focused_malefic_doctrine]
+  notes: |
+    User-insight grounded yoga (v26): "fewer significant yogas should
+    beat many less-significant ones." Manual inspection across iterations
+    showed RANK-1 noise windows on missed charts ALL had 5+ distinct
+    chain roles (Mario Cuomo, Victor Hugo, Bligh, Holliday) — these
+    are "perfect storm" windows that fire many correlated mid-strength
+    yogas. Death windows typically have 2-4 roles (FOCUSED malefic).
+    Classical ground (BPHS Ch.46): the death-timing yogas require
+    SPECIFIC role activation (8L OR maraka OR badhaka), not breadth.
+    Used as ATTACK in death_signatures so noise "perfect storm"
+    windows get net-discounted, allowing focused death windows to
+    surface.
+- rule_id: parashari.longevity.mars_acute_transit_active.01
+  school: parashari
+  source: Phaladeepika Ch.18 + BPHS Ch.46 — Mars transit acute triggers
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  # v38: Mars acute triggers only when Mars is NOT yogakaraka for
+  # this lagna (skip Cancer/Leo where Mars is YK and his transit
+  # is auspicious, not destructive).
+  - feature: chart_applicability.mars_is_yk
+    op: eq
+    value: false
+  required:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  factors:
+  - {feature: candidate.mars_over_natal_sun,    op: eq, value: true,  weight: 1.0}
+  - {feature: candidate.mars_8h_from_moon,      op: eq, value: true,  weight: 1.0}
+  - {feature: candidate.mars_transit_target,    op: eq, value: true,  weight: 0.8}
+  - {feature: candidate.lord_roles_present,     op: contains_any, value: [maraka, eighth_from_target, badhaka_lord], weight: 0.4}
+  base_strength: 0.55
+  min_factors: 1
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Mars transit hitting natal Sun / 8H-from-Moon / target sign at window midpoint
+  confidence: 0.55
+  priority_tier: 2
+  tags: [graded_yoga, mars, transit, acute_death]
+  notes: |
+    Per-window Mars transit yoga: Mars over natal Sun (acute affliction
+    to pitri karaka — Phaladeepika Ch.18), Mars in 8H from natal Moon
+    (sudden death trigger — BPHS Ch.46), or Mars over natal target
+    sign. Each Mars overlay independently fires, with the death-cluster
+    role bonus when chain is also activated. Used in death_signatures
+    pool — fills gap left by Saturn-only transits which fire on too
+    many windows (Saturn moves 1 sign/2.5yr, Mars 1 sign/45-60 days,
+    so Mars transits are MUCH more discriminating temporally).
+- rule_id: parashari.longevity.jupiter_in_chain_dignified_protective.01
+  school: parashari
+  source: BPHS Ch.5 — Jupiter dignity protection / Saravali 30
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.jupiter_safe_protective
+    op: eq
+    value: true
+  factors:
+  - {feature: candidate.jupiter_safe_protective,      op: eq,           value: true,                 weight: 1.0}
+  - {feature: candidate.chain_strength,               op: in,           value: [full, partial],      weight: 0.5}
+  - {feature: candidate.lord_roles_present,           op: contains_any, value: [direct_lord, rotated_lord, relation_karaka], weight: 0.5}
+  base_strength: 0.55
+  min_factors: 1
+  consequent:
+    polarity: positive
+    strength: 0.55
+    timing_hint: Well-placed Jupiter (greatest benefic) in the active chain — and not playing a death-cluster role — protects against malefic activation
+  confidence: 0.55
+  priority_tier: 2
+  tags: [graded_yoga, jupiter, protective, chain_composition]
+  notes: |
+    Per-window protective yoga: Jupiter is treated as protective only
+    when:
+      1. Natally well-placed (exalted/own/friend dignity) — debilitated
+         Jupiter is itself afflicted and does NOT protect (Bérard,
+         v17 analysis); AND
+      2. Jupiter himself does NOT play any death-cluster role (maraka,
+         eighth_from_target, badhaka_lord) at the chain level where he
+         sits — Karako Bhava Nashaya (Phaladeepika Ch.6, Saravali 31):
+         when Jupiter as dasha lord triggers the malefic chain, he
+         becomes the agent of the affliction and is NOT protective
+         (Victor Hugo + Holliday regression analysis, v17).
+
+    Pairs with sun_in_chain_protective.01 (which fires only on FULL
+    Sun chains). Used as ATTACK in death_signatures so volume-of-
+    malefics windows that ALSO have safe protective Jupiter get net-
+    discounted.
+- rule_id: parashari.longevity.mrityu_bhaga_chain_lord_active.01
+  school: parashari
+  source: BPHS Ch.40 — Mrityu Bhaga (death degrees)
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [self, father, mother, spouse, children, elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  required:
+  - feature: candidate.chain_lord_in_mrityu_bhaga
+    op: eq
+    value: true
+  factors:
+  - {feature: candidate.n_chain_in_mrityu_bhaga,    op: gte,          value: 1,                    weight: 1.0}
+  - {feature: candidate.n_chain_in_mrityu_bhaga,    op: gte,          value: 2,                    weight: 0.6}
+  - {feature: candidate.lord_roles_present,         op: contains_any, value: [maraka, eighth_from_target, badhaka_lord, direct_lord, rotated_lord, domain_karaka, relation_karaka], weight: 0.5}
+  - {feature: candidate.chain_lord_in_dusthana,     op: eq,           value: true,                 weight: 0.4}
+  base_strength: 0.55
+  min_factors: 1
+  consequent:
+    polarity: negative
+  priority_tier: 2
+  tags: [graded_yoga, mrityu_bhaga, classical_death_degree]
+  notes: |
+    Mrityu Bhaga (BPHS Ch.40): planet at its critical degree-in-sign
+    activates death significance during its dasha. Required gate is
+    that at least one chain lord sits within ±1° of its classical
+    Mrityu Bhaga degree. Factors amplify when multiple chain lords
+    are at critical degrees, when chain lords also play dusthana
+    roles, etc. Tier-2 — supplementary to dasha_chain_strength.
+
+# ────────────────────────────────────────────────────────────────────
+# v32 — inverted-mining additions (RAG cluster review, see
+# astroql/inverted_mining/data/audit/parashari.md). Each rule below
+# was distilled from a high-frequency cluster (≥9 source charts) that
+# matched a death-state snapshot, and is grounded in a classical text
+# citation, not in a fitting heuristic.
+# ────────────────────────────────────────────────────────────────────
+
+- rule_id: parashari.longevity.malefics_4h_from_sun.01
+  school: parashari
+  source: |
+    Patel, Ashtakavarga (1996), Sloka 10 — RAG cluster C8 (freq=45):
+    "A person born having Rahu, Saturn or Mars in the 4th house from
+    the Sun, will be the cause of his father's early death provided
+    that house (4th house from the Sun) is not aspected either by
+    Jupiter or Venus."
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.malefics_4h_from_sun_unprotected
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: chart-static — applies uniformly across windows
+  confidence: 0.6
+  tags: [chart_static, malefics, sun_pitri, ashtakavarga]
+  priority_tier: 2
+  notes: |
+    Father-specific by classical doctrine (rule names "father's early
+    death"). The "unprotected" gate AND-s the Jupiter/Venus aspect
+    exception in the rule body so we don't need a separate attack
+    yoga. Static line — fires once per chart, contributes a constant
+    offset to all windows in that chart's static_promise score.
+
+- rule_id: parashari.longevity.saturn_transit_9h_from_moon.01
+  school: parashari
+  source: |
+    Patel, Ashtakavarga (1996), Sloka 11 — RAG cluster C8 (freq=45):
+    "When Saturn transits the 9th house from the Lagna or the Moon,
+    the demise of one's parents may be predicted, if he (Saturn) is
+    aspected by or associated with a malefic planet."
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.saturn_transit_9h_from_moon
+    op: eq
+    value: true
+  - feature: candidate.n_malefics_in_chain
+    op: gte
+    value: 1
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Saturn transits 9H from natal Moon AND chain has ≥1 malefic
+  confidence: 0.55
+  tags: [transit, saturn, ninth_from_moon, ashtakavarga]
+  priority_tier: 1
+  notes: |
+    Patel narrows the 9H-from-Lagna/Moon Saturn transit by the
+    classical "association/aspect with malefic" gate. We approximate
+    "associated with malefic" via "chain has ≥1 malefic" — the active
+    dasha lords being malefic-loaded acts as the activation context.
+
+- rule_id: parashari.longevity.saturn_in_father_critical_nakshatra.01
+  school: parashari
+  source: |
+    BPHS via Santhanam — RAG cluster C7 (freq=45):
+    "If Saturn passes in transit through Uttarabhadrapada,
+    Pushyami or Anuradha nakshatras, the death of father will take
+    place if an inauspicious Dasa be in operation. Should the Dasa
+    be auspicious or favourable, the father will be in great distress."
+  rule_type: transit_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.saturn_in_father_critical_nakshatra
+    op: eq
+    value: true
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 2
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: |
+      Saturn transits Pushya/Anuradha/Uttarabhadra AND chain has
+      ≥2 confluent roles (proxy for "inauspicious dasha")
+  confidence: 0.6
+  tags: [transit, saturn, nakshatra, father_specific, bphs]
+  priority_tier: 1
+  notes: |
+    Father-specific by classical doctrine. The "inauspicious dasha"
+    requirement from BPHS is approximated by chain has 2+ roles
+    activated — chain confluence is our proxy for dasha
+    inauspiciousness. Without the role gate the rule fires far
+    too often (every chart hits these nakshatras periodically).
+
+- rule_id: parashari.longevity.malefic_saturn_with_maraka_chain.01
+  school: parashari
+  source: |
+    Chatterjee, Advanced Medical Astrology — RAG cluster C15 (freq=9):
+    "When a malefic Saturn is associated with any of the planets
+    causing death he over sides all others and himself causes death."
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.saturn_is_fm
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.malefic_saturn_with_maraka_chain
+    op: eq
+    value: true
+  - feature: candidate.chain_strength
+    op: eq
+    value: full
+  consequent:
+    polarity: negative
+    strength: 0.6
+    timing_hint: Saturn in FULL chain co-active with chain-maraka role lord
+  confidence: 0.6
+  tags: [dasha_chain, saturn, maraka, classical_death]
+  priority_tier: 1
+  notes: |
+    Chatterjee's doctrine: when Saturn co-runs with a death-cluster
+    role lord (8L / maraka / badhaka), Saturn dominates the
+    period and himself becomes the death agent.
+
+    v33d: tightened to chain_strength=full (3/3 lords matched) to
+    cut noise. v33b/c showed the original gate (Saturn-in-chain +
+    any chain death role) fired in 80%+ of top-20 windows because
+    Saturn-in-vimshottari-period × death-cluster-role-overlap is
+    a common conjunction. Restricting to FULL chains shrinks the
+    fire-rate sharply while keeping the doctrine's cleanest
+    instances.
+
+# ────────────────────────────────────────────────────────────────────
+# v34 — gap-fill yogas distilled by manual inspection of slice 30-60
+# death-window features (c:/tmp/slice30_60_inspect.md). Three high-
+# frequency death-window features had ZERO rule references:
+#   - rahu_or_ketu_in_chain  (17/29 = 59%)
+#   - n_combust_in_chain     (9/29 = 31%)
+#   - window_short alone     (12/29 = 41% — partial coverage in
+#                              short_pad_role_confluence which
+#                              required role + short, not standalone)
+# Each gated by a co-active death-cluster role to avoid firing on
+# every Rahu MD / every short window without doctrine support.
+# ────────────────────────────────────────────────────────────────────
+
+- rule_id: parashari.longevity.rahu_ketu_in_chain_with_death_role.01
+  school: parashari
+  source: |
+    Classical Vedic doctrine — Rahu/Ketu dashas inherently
+    inauspicious for relations (Phaladeepika Ch.20, BPHS Ch.46);
+    when shadow-planet co-runs with chain-death-role (8L/maraka/
+    badhaka) the dasha amplifies that death significance.
+    Gap-fill from slice-30-60 contrastive mining — 16/30 death
+    windows had Rahu/Ketu in chain vs only 1 noise window; biggest
+    discriminator found.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.rahu_or_ketu_in_chain
+    op: eq
+    value: true
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  consequent:
+    polarity: negative
+    strength: 0.55
+    timing_hint: Rahu/Ketu in active chain with role activation
+  confidence: 0.55
+  tags: [dasha_chain, rahu_ketu, shadow_planet, contrastive_finding]
+  priority_tier: 1
+  notes: |
+    v36 graded refactor reverted in v37 — graded form needed
+    weight calibration via contrastive natal mining (not done
+    yet). Restored monolithic v35 form.
+
+- rule_id: parashari.longevity.combust_chain_lord_in_death_dasha.01
+  school: parashari
+  source: |
+    Classical Vedic doctrine — combust planets become functionally
+    weak/inauspicious (Phaladeepika Ch.16). When a combust planet
+    lords a chain dasha that already plays a death-cluster role,
+    its weakness magnifies the malefic outcome rather than mitigating it.
+    Gap-fill from slice-30-60 inspection — 9/29 death windows had
+    a combust chain lord; only chain_dignity_afflicted (graded yoga)
+    referenced this, no standalone rule.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.n_combust_in_chain
+    op: gte
+    value: 1
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: Combust chain lord with role activation
+  confidence: 0.5
+  tags: [dasha_chain, combust, classical_weakness, manual_inspection_gap_fill]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.mars_in_chain_without_role_attack.01
+  school: parashari
+  source: |
+    v35 contrastive-mining finding (slice 30-60): mars_in_chain
+    fired in 15 imposters but only 2 death windows (D-N=-13).
+    Mars-in-chain WITHOUT a co-active death-cluster role is a
+    strong imposter signature. Classical doctrine: Mars in dasha
+    is martial/active but doesn't cause death without specific
+    role activation; it boosts non-death windows that look
+    "active" but aren't death-laden.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  # v38: Mars-imposter pattern only when Mars is NOT yogakaraka for
+  # this lagna. For Cancer/Leo lagna Mars is YK — Mars in chain is
+  # auspicious, no imposter pattern to dampen.
+  - feature: chart_applicability.mars_is_yk
+    op: eq
+    value: false
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.mars_in_chain
+    op: eq
+    value: true
+  - feature: candidate.malefic_saturn_with_maraka_chain
+    op: eq
+    value: false
+  consequent:
+    polarity: positive
+    strength: 0.4
+    timing_hint: Mars in chain WITHOUT death-role activation = imposter
+  confidence: 0.55
+  tags: [attack, contrastive_finding, mars_imposter, lagna_scoped]
+  priority_tier: 1
+  notes: |
+    v38: added applicable_when chart_applicability.mars_is_yk=false.
+    v36 graded refactor reverted in v37. polarity=positive on
+    event_negative life-area = ATTACK.
+
+- rule_id: parashari.longevity.short_window_role_activation.01
+  school: parashari
+  source: |
+    Classical Vedic doctrine — short pratyantar windows (< 60 days)
+    that activate maraka roles indicate time-compressed event delivery
+    (BPHS Ch.46 — sudden death, "kshanika maraka"). Gap-fill from
+    slice-30-60: 12/29 death windows were window_short; existing
+    short_pad_role_confluence required a tighter pattern.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: candidate.level
+    op: eq
+    value: PAD
+  - feature: candidate.window_short
+    op: eq
+    value: true
+  - feature: candidate.n_distinct_roles
+    op: gte
+    value: 2
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: Short PAD window with confluent role activation
+  confidence: 0.5
+  tags: [dasha_chain, time_compression, manual_inspection_gap_fill]
+  priority_tier: 2
+
+# ────────────────────────────────────────────────────────────────────
+# v33 — BPHS Ch.13 verses 13-25 — chart-static father-death yogas
+# (RAG v2 mining cluster, 'BPHS-1 RSanthanam.pdf' + 'Brihat Parāśara
+# Horā Śhāstra By R. Santhanam_djvu.txt').
+#
+# v33b: AGE GATE DROPPED. Initial design used the age-window gate
+# (e.g., "fires only for candidate windows near native's 12th year")
+# but 97-chart scan showed all 3 firings had age MISMATCHES — chart
+# patterns fired but predicted age ≠ actual loss age. Dropping the
+# gate makes these generic chart-static risk markers — they fire
+# uniformly across all windows of a chart that has the natal
+# combination, contributing to static_promise via tied-ranking.
+# Doctrinally less precise but practically usable on this dataset.
+# ────────────────────────────────────────────────────────────────────
+
+- rule_id: parashari.longevity.bphs_13_father_within_1y.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "Sun in 8th + 8L in 9th → father dies within native's 1st year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_within_1y
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.75
+    timing_hint: chart-static — Sun in 8H + 8L in 9H
+  confidence: 0.7
+  tags: [bphs_13, chart_static]
+  priority_tier: 1
+
+- rule_id: parashari.longevity.bphs_13_father_year_12.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "Lagna lord in 8 + 8L conjunct Sun → father dies in 2nd or 12th year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_year_2_or_12
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.65
+    timing_hint: chart-static — Lagna lord in 8H + 8L conjunct Sun
+  confidence: 0.65
+  tags: [bphs_13, chart_static]
+  priority_tier: 1
+
+- rule_id: parashari.longevity.bphs_13_father_year_16_or_18.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "Rahu in 4H + Sun in 5H → father dies in 16th or 18th year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_year_16_or_18
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.65
+    timing_hint: chart-static — Rahu in 4H + Sun in 5H
+  confidence: 0.65
+  tags: [bphs_13, chart_static]
+  priority_tier: 1
+
+- rule_id: parashari.longevity.bphs_13_father_year_44.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "9L in 12 + 12L in 9 (parivartana) → father dies in 44th year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_year_44_parivartana
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.7
+    timing_hint: chart-static — 9L-12L mutual exchange (parivartana)
+  confidence: 0.7
+  tags: [bphs_13, chart_static, parivartana]
+  priority_tier: 1
+
+- rule_id: parashari.longevity.bphs_13_father_year_50.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "Sun is the 9L conjunct Mars and Saturn → father dies in 50th year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_year_50_sun_mars_saturn
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.7
+    timing_hint: chart-static — Sun=9L conjunct Mars and Saturn
+  confidence: 0.7
+  tags: [bphs_13, chart_static, sun_mars_saturn]
+  priority_tier: 1
+
+- rule_id: parashari.longevity.bphs_13_father_year_26.01
+  school: parashari
+  source: BPHS Ch.13 v.13-25 — "9L debilitated + dispositor of 9L in 9H → father dies in 26th or 30th year"
+  rule_type: static_placement
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.bphs_13_pattern_year_26_or_30
+    op: eq
+    value: true
+  consequent:
+    polarity: negative
+    strength: 0.65
+    timing_hint: chart-static — 9L debilitated + dispositor in 9H
+  confidence: 0.65
+  tags: [bphs_13, chart_static]
+  priority_tier: 1
+
+# ─────────────────────────────────────────────────────────────────────
+# v38.7 — NATAL-CONTEXT AMPLIFIERS (Phaladeepika Ch.14, BPHS Ch.24-25)
+# These fire only on charts where father's bhava is natally compromised
+# AND the candidate window already has chain activation. They add signal
+# to windows that classically warrant stronger death-weight, without
+# removing signal elsewhere (additive, not subtractive).
+# ─────────────────────────────────────────────────────────────────────
+
+- rule_id: parashari.longevity.pitri_dosha_natal_amplifier.01
+  school: parashari
+  source: |
+    BPHS Ch.24 — pitri dosha definition (Sun with Saturn or Sun with
+    nodes = natal father-karaka affliction, inherited paternal karma).
+    When the chart carries this natal wound AND the candidate window
+    activates any death-cluster role, the wound becomes eventful.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.pitri_dosha_sun_saturn
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: Natal Sun-Saturn pitri dosha + chain death-role activation
+  confidence: 0.55
+  tags: [natal_amplifier, pitri_dosha, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.pitri_dosha_nodes_natal_amplifier.01
+  school: parashari
+  source: |
+    Phaladeepika Ch.14 — Sun eclipsed by Rahu/Ketu natally =
+    father's karma disturbed (grahan yoga around pitri karaka).
+    Amplifies death-role-active windows.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.pitri_dosha_sun_nodes
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: Natal Sun-Rahu/Ketu eclipse + chain death-role activation
+  confidence: 0.55
+  tags: [natal_amplifier, pitri_dosha, grahan, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.papa_kartari_father_amplifier.01
+  school: parashari
+  source: |
+    Phaladeepika Ch.14 — papa kartari (malefic scissors) on Sun
+    indicates natal siege of father-karaka. Activated by chain
+    death-role, the siege crystallizes into eventful timing.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.papa_kartari_on_sun
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: Natal papa-kartari on Sun + chain death-role activation
+  confidence: 0.55
+  tags: [natal_amplifier, papa_kartari, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.papa_kartari_ninth_amplifier.01
+  school: parashari
+  source: |
+    Phaladeepika Ch.14 — papa kartari on 9H = father's bhava under
+    natal malefic siege; triggers under death-role chain activation.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.papa_kartari_on_ninth
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: Natal papa-kartari on 9H + chain death-role activation
+  confidence: 0.55
+  tags: [natal_amplifier, papa_kartari, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.ninth_house_malefic_amplifier.01
+  school: parashari
+  source: |
+    BPHS Ch.24 — natural malefic occupying 9H natally afflicts the
+    father-bhava directly (Saturn/Mars/Rahu/Ketu in 9H). When the
+    candidate window brings chain-role activation, this placement
+    fires as a doctrinal father-death signal. Covers charts where
+    Saturn-is-FM gate would otherwise skip Saturn transit rules
+    (e.g. Virgo lagna Saturn-in-9H).
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.ninth_house_has_malefic
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.45
+    timing_hint: Natal malefic in 9H + chain death-role activation
+  confidence: 0.55
+  tags: [natal_amplifier, ninth_house, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.ninth_house_aspected_malefic_amplifier.01
+  school: parashari
+  source: |
+    Phaladeepika Ch.14 — natal malefic aspecting 9H afflicts the
+    father-bhava remotely. Activates when chain brings death role.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.ninth_house_aspected_by_malefic
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord, relation_karaka]
+  consequent:
+    polarity: negative
+    strength: 0.4
+    timing_hint: Malefic aspects 9H natally + chain death-role
+  confidence: 0.55
+  tags: [natal_amplifier, ninth_house, v38_7]
+  priority_tier: 2
+
+- rule_id: parashari.longevity.severe_father_affliction_amplifier.01
+  school: parashari
+  source: |
+    v38.7 composite — father_affliction_score >= 4 (Phaladeepika Ch.14
+    compound: sun_in_dusthana + nl_in_dusthana + sun_afflicted +
+    nl_afflicted + 9H affliction + papa_kartari + pitri_dosha — 4+
+    distinct markers) is a classical high-severity signature.
+    Amplifies chain-death-role activations accordingly.
+  rule_type: dasha_timing
+  applicable_to:
+    relationships: [father]
+    life_areas: [longevity]
+    effects: [event_negative]
+  applicable_when:
+  - feature: chart_applicability.father_severely_afflicted
+    op: eq
+    value: true
+  antecedent:
+  - feature: candidate.level
+    op: in
+    value: [AD, PAD]
+  - feature: candidate.chain_strength
+    op: in
+    value: [full, partial]
+  - feature: candidate.lord_roles_present
+    op: contains_any
+    value: [maraka, eighth_from_target, badhaka_lord, rotated_lord]
+  consequent:
+    polarity: negative
+    strength: 0.5
+    timing_hint: Severely-afflicted natal father bhava + strong chain + death role
+  confidence: 0.55
+  tags: [natal_amplifier, severity_compound, v38_7]
+  priority_tier: 2
+

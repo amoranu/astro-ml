@@ -1,0 +1,302 @@
+plan_id: parashari.longevity.v1
+school: parashari
+relationship: father
+life_area: longevity
+effect: event_negative
+goal: |
+  Predict timing windows for father's death event using classical
+  Parashari longevity factors: natal promise (target lord + Sun + Saturn
+  affliction), dasha chain activation (maraka / 8L / role overlay), time
+  compression (md=pad, short window), transit overlays (saturn/jupiter,
+  sade sati). Each reasoning line scores independently via noisy-OR;
+  RRF fuses across lines.
+
+reasoning_lines:
+
+  - id: static_promise
+    description: |
+      Is the natal father-longevity arc fundamentally afflicted? Looks
+      at rotated 9L, direct 9L, Sun (relation karaka), Saturn (domain
+      karaka / ayushkaraka). Static rules — fire once per chart, apply
+      uniformly across all candidate windows.
+    yogas:
+      supporting:
+        - parashari.longevity.rotated_lord_afflicted.01
+        - parashari.longevity.rotated_lord_in_dusthana.01
+        - parashari.longevity.relation_karaka_in_dusthana.01
+        - parashari.longevity.relation_karaka_afflicted.01
+        - parashari.longevity.domain_karaka_saturn_afflicted.01
+        - parashari.longevity.direct_lord_dusthana.01
+        - parashari.longevity.node_in_direct_house.01
+        - parashari.longevity.sun_saturn_conjunction.01
+        # v32 inverted-mining: Patel Ashtakavarga sloka 10
+        - parashari.longevity.malefics_4h_from_sun.01
+      attacking:
+        - parashari.longevity.jupiter_aspects_direct.01
+        - parashari.longevity.sun_in_chain_protective.01
+    alpha: 0.5
+
+  - id: dasha_chain_strength
+    description: |
+      Does this window's chain (MD/AD/PAD/SD) activate the natal
+      affliction? Looks at maraka/8L role coverage, role overlay
+      (n_max_level_roles), classical maraka yoga, single-lord
+      activation (md_lord_is_8l/maraka/badhaka). Capped at top-3
+      yogas per window so noisy-OR doesn't saturate at 1.0 on every
+      role-bearing window (which would erase ranking signal).
+    yogas:
+      supporting:
+        - parashari.longevity.classical_maraka_yoga.01
+        - parashari.longevity.role_overlay_yoga.01
+        - parashari.longevity.eighth_from_target_dasha_full.01
+        - parashari.longevity.eighth_from_target_dasha_partial.01
+        - parashari.longevity.maraka_dasha_full.01
+        - parashari.longevity.maraka_dasha_partial.01
+        - parashari.longevity.rotated_lord_dasha.01
+        - parashari.longevity.relation_karaka_dasha.01
+        - parashari.longevity.md_lord_is_8l.01
+        - parashari.longevity.md_lord_is_maraka.01
+        - parashari.longevity.md_lord_is_badhaka.01
+        - parashari.longevity.chain_lord_in_8h_from_target.01
+        - parashari.longevity.chain_lord_in_dusthana_natally.01
+        - parashari.longevity.chain_dignity_afflicted.01
+        - parashari.longevity.domain_karaka_in_chain.01
+        - parashari.longevity.confluence_n_distinct_3.01
+        - parashari.longevity.role_diversity_bonus.01
+        # v32 inverted-mining: Chatterjee — Saturn dominates death
+        # when in chain with maraka-role lord
+        - parashari.longevity.malefic_saturn_with_maraka_chain.01
+        # v34 manual-gap-fill from slice-30-60 inspection
+        - parashari.longevity.rahu_ketu_in_chain_with_death_role.01
+        - parashari.longevity.combust_chain_lord_in_death_dasha.01
+    alpha: 0.5
+    max_yogas_per_window: 3
+
+  - id: dasha_chain_concentration
+    description: |
+      Is the activation time-compressed? Sudden death often lines up
+      with single-planet repetition in the chain (md=pad), short PAD
+      windows with role confluence, or same-lord stacking.
+    yogas:
+      supporting:
+        - parashari.longevity.time_compressed_yoga.01
+        - parashari.longevity.same_lord_chain.01
+        - parashari.longevity.md_pad_same_planet_with_role.01
+        - parashari.longevity.short_pad_role_confluence.01
+        # v34 manual-gap-fill — short window with confluent roles
+        - parashari.longevity.short_window_role_activation.01
+    alpha: 0.5
+
+  - id: transit_overlay
+    description: |
+      Slow-mover transits (Saturn / Jupiter) hitting sensitive points
+      at this window's midpoint. Includes Sade Sati / Ashtama Shani /
+      Kantaka Shani classical yogas. Jupiter transit over target is
+      protective (attack pool). Capped at top-3 supporting yogas —
+      overlapping Saturn transits otherwise saturate noisy-OR.
+    yogas:
+      supporting:
+        - parashari.longevity.father_specific_yoga.01
+        - parashari.longevity.sade_sati.01
+        - parashari.longevity.ashtama_shani.01
+        - parashari.longevity.kantaka_shani.01
+        - parashari.longevity.saturn_transit_target.01
+        - parashari.longevity.saturn_over_natal_sun_father.01
+        # v32 inverted-mining: Patel Ashtakavarga sloka 11
+        - parashari.longevity.saturn_transit_9h_from_moon.01
+        # v32 inverted-mining: BPHS Santhanam — Saturn in
+        # Pushya/Anuradha/Uttarabhadra nakshatras with confluent chain
+        - parashari.longevity.saturn_in_father_critical_nakshatra.01
+      attacking:
+        - parashari.longevity.jupiter_transit_target_protective.01
+    alpha: 0.5
+    max_yogas_per_window: 3
+
+  - id: weak_chain_carrier
+    description: |
+      Rescue line for charts where the chain is weak (no direct role
+      activation by chain lords) but the death window still lights up
+      via nakshatra-lord shadow chain or pratyantar-level affliction
+      of target lord.
+    yogas:
+      supporting:
+        - parashari.longevity.weak_chain_shadow_yoga.01
+        - parashari.longevity.weak_chain_with_nak_lord_relevant.01
+        - parashari.longevity.nak_lord_role_confluence.01
+        - parashari.longevity.weak_chain_fallback.01
+        - parashari.longevity.afflicted_target_lord_pratyantar.01
+    alpha: 0.5
+
+  - id: yoga_mrityu_bhaga
+    description: |
+      Mrityu Bhaga (BPHS Ch.40): chain lord at its classical death
+      degree (within ±1°). Independent of role activation — a planet
+      at its critical degree carries death significance during its
+      dasha regardless of other chain conditions.
+    yogas:
+      supporting:
+        - parashari.longevity.mrityu_bhaga_chain_lord_active.01
+    alpha: 0.5
+
+  - id: bphs_13_chart_patterns
+    description: |
+      v33 inverted-mining (RAG v2): BPHS Ch.13 verses 13-25 — six
+      chart-static father-death combinations. Each rule fires when
+      the natal pattern is present; v33b dropped the age-window gate
+      after a 97-chart scan showed all 3 firings had age MISMATCHES
+      (chart pattern fired but BPHS-predicted age != actual loss
+      age). Without the gate these are generic risk markers — they
+      fire uniformly across all windows of a chart that has the
+      combination, contributing to score via tied-ranking. Doctrinal
+      precision lost; benchmark utility preserved.
+    yogas:
+      supporting:
+        - parashari.longevity.bphs_13_father_within_1y.01
+        - parashari.longevity.bphs_13_father_year_12.01
+        - parashari.longevity.bphs_13_father_year_16_or_18.01
+        - parashari.longevity.bphs_13_father_year_44.01
+        - parashari.longevity.bphs_13_father_year_50.01
+        - parashari.longevity.bphs_13_father_year_26.01
+    alpha: 0.5
+
+  - id: death_signatures
+    description: |
+      Manual-inspection rescue line (PHASE_F_ARCHITECTURE.md §15).
+      Pool of the most-discriminating classical death-pattern yogas:
+
+      Tier-1 dasha triggers (added v17 after Kirsti Hopstock miss
+      analysis — these were siloed in dasha_chain_strength where
+      volume-correlated lower-tier yogas drowned them):
+        - maraka_dasha_full         (MD lord owns 2H/7H from target)
+        - eighth_from_target_dasha_full (MD lord owns 8H from target)
+        - md_lord_is_8l / md_lord_is_maraka / md_lord_is_badhaka
+
+      Tier-2 specific patterns:
+        - classical_maraka_yoga       (full classical maraka pattern)
+        - ashtama_shani               (Saturn 8H from natal Moon)
+        - kantaka_shani               (Saturn 4H from natal Moon)
+        - saturn_over_natal_sun_father (Saturn over pitri karaka)
+        - chain_lord_in_8h_from_target (chain lord in death-house)
+        - mrityu_bhaga_chain_lord_active (BPHS Ch.40)
+        - time_compressed_yoga        (md=pad sudden-death pattern)
+        - father_specific_yoga        (relation-specific overlay)
+
+      ATTACKS (added v17 per user insight: "firing more signatures
+      can be overridden by something firing against those") —
+      protective benefic yogas that should counter when present:
+        - jupiter_in_chain_dignified_protective (Jupiter in chain)
+        - jupiter_transit_target_protective    (Jupiter transit on target)
+        - sun_in_chain_protective              (full chain w/ Sun)
+
+      Capped at top-3 per pool so it can't be saturated by volume.
+    yogas:
+      supporting:
+        - parashari.longevity.classical_maraka_yoga.01
+        - parashari.longevity.ashtama_shani.01
+        - parashari.longevity.kantaka_shani.01
+        - parashari.longevity.md_lord_is_8l.01
+        - parashari.longevity.saturn_over_natal_sun_father.01
+        - parashari.longevity.chain_lord_in_8h_from_target.01
+        - parashari.longevity.mrityu_bhaga_chain_lord_active.01
+        - parashari.longevity.time_compressed_yoga.01
+        - parashari.longevity.father_specific_yoga.01
+        - parashari.longevity.mars_acute_transit_active.01
+        - parashari.longevity.maraka_dasha_full.01
+        - parashari.longevity.mrityu_yoga_mars_saturn_conjunction.01
+        # v29: focused_death_chain — positive counterpart to v26's
+        # over-diversification penalty. Rewards windows where death-
+        # cluster role activates WITHOUT broad role coverage (1-4
+        # distinct roles). Empirical pattern across worst misses:
+        # death windows have 1-3 roles, noise has 4-5+.
+        - parashari.longevity.focused_death_chain.01
+        # v32 inverted-mining promotions (RAG-grounded discriminative
+        # patterns): Saturn transit on 9H-from-Moon with malefic chain
+        # (Patel Ashtakavarga sloka 11), malefic Saturn in FULL chain
+        # with maraka role (Chatterjee, v33d tightened).
+        # v35 contrastive: REMOVED saturn_in_father_critical_nakshatra
+        # — fired in 11 imposters, 0 deaths in slice 30-60. Kept in
+        # transit_overlay only (less impact under capped pool).
+        - parashari.longevity.saturn_transit_9h_from_moon.01
+        - parashari.longevity.malefic_saturn_with_maraka_chain.01
+        # v35 contrastive: PROMOTED rahu_or_ketu_in_chain — biggest
+        # discriminator (D=16 N=1 net=+15 in slice 30-60).
+        - parashari.longevity.rahu_ketu_in_chain_with_death_role.01
+        # v38.7 natal-context amplifiers — fire only when chart is
+        # natally compromised (pitri dosha / papa kartari / severe
+        # affliction) AND per-window role activation present.
+        - parashari.longevity.pitri_dosha_natal_amplifier.01
+        - parashari.longevity.pitri_dosha_nodes_natal_amplifier.01
+        - parashari.longevity.papa_kartari_father_amplifier.01
+        - parashari.longevity.papa_kartari_ninth_amplifier.01
+        - parashari.longevity.ninth_house_malefic_amplifier.01
+        - parashari.longevity.ninth_house_aspected_malefic_amplifier.01
+        - parashari.longevity.severe_father_affliction_amplifier.01
+        # v27 attempt to add md_lord_is_maraka REVERTED: helped Roselyne
+        # marginally (rank 404 → 375, no top-10 change) but bumped Fritz
+        # Huitfeldt out of hit@10_pm6mo (r6mo 8 → 16). Net -1 chart on
+        # the headline metric.
+        # sade_sati REMOVED v26: v25 experiment showed promotion hurts
+        # by inflating noise windows where Saturn-Moon alignment
+        # coincides with non-death timing (sade_sati fires for 7.5
+        # years per cycle, too broad). Stays in transit_overlay only.
+      attacking:
+        - parashari.longevity.jupiter_transit_target_protective.01
+        - parashari.longevity.sun_in_chain_protective.01
+        # v26: over-diversification penalty (BPHS Ch.46 / Phaladeepika
+        # Ch.18 — focused malefic doctrine). Penalizes "perfect storm"
+        # windows where 5+ chain roles all activate; classical death-
+        # timing prefers 1-2 SPECIFIC malefic role activations, not
+        # broad coverage.
+        - parashari.longevity.over_diversified_chain_attack.01
+        # v35 contrastive: Mars-in-chain WITHOUT death-cluster role
+        # is the biggest imposter signature (D=2 N=15 in slice 30-60).
+        - parashari.longevity.mars_in_chain_without_role_attack.01
+    alpha: 0.5
+    max_yogas_per_window: 3
+
+aggregation:
+  method: rrf
+  k: 60
+  weights:
+    # static_promise contributes only as a constant offset (tied
+    # ranking) so its weight has no within-chart effect — kept low.
+    static_promise: 0.5
+    # Manual inspection (PHASE_F_ARCHITECTURE.md §15) found:
+    #   - Death windows skew toward chain_strength=weak.
+    #   - Rank-1 noise windows have many correlated low-specificity
+    #     yogas (role_diversity_bonus, role_overlay_yoga, etc.) that
+    #     measure the same "strong activation" signal.
+    #   - Death windows have FEW but HIGHLY-SPECIFIC yogas (ashtama
+    #     shani, classical maraka, MD=8L, saturn-over-natal-Sun, etc.)
+    # death_signatures is the dedicated rescue line for the second
+    # pattern — top RRF weight so it can outrank dasha_chain_strength
+    # noise.
+    dasha_chain_strength: 1.2
+    dasha_chain_concentration: 1.2
+    transit_overlay: 1.2
+    # v24: weak_chain_carrier boosted 1.6 → 2.2. Manual inspection
+    # showed Bérard's death window has weak_chain_carrier rank=29
+    # (top 5%!) but RRF contribution at weight 1.6 was only 0.018,
+    # dwarfed by noise windows winning across 4-5 lines. Higher
+    # weight lets a single-line specialist beat a multi-line
+    # generalist when that line has a confident rank.
+    weak_chain_carrier: 2.2
+    yoga_mrityu_bhaga: 0.8
+    death_signatures: 1.4
+    # v33 inverted-mining: BPHS Ch.13 verses 13-25 chart patterns.
+    # v33b dropped age gate (see line description). Now chart-static
+    # risk markers — uniform across windows in a chart with the
+    # combination. Lower weight (similar to static_promise) since
+    # tied ranking neutralizes within-chart contribution.
+    bphs_13_chart_patterns: 0.6
+
+# Exceptions reference ids in parashari/exceptions.yaml.
+# Phase F.9 added: vipreet_raja_yoga (line-scope override on
+# static_promise + dasha_chain_strength when 6L/8L/12L mutually placed),
+# and neecha_bhanga_chain_lord (yoga-scope softening for classical_maraka
+# / role_overlay when a debilitated chain lord has its debility cancelled).
+exceptions:
+  - saturn_in_own_or_exalted_softens_sade_sati
+  - sun_in_chain_protective_dampens_static
+  - vipreet_raja_yoga
+  - neecha_bhanga_chain_lord

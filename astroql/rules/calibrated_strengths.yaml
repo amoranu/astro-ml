@@ -1,0 +1,116 @@
+meta:
+  dataset: ml/father_passing_date_clean_clean2.json
+  n_charts: 30
+  prior_hit_rate: 0.05
+  learning_rate: 0.5
+rules:
+  jaimini.longevity.ak_in_dusthana.01:
+    fires: 12
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  jaimini.longevity.atmakaraka_afflicted.01:
+    fires: 7
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  jaimini.longevity.bk_in_target.01:
+    fires: 10
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  jaimini.longevity.gk_in_target_direct.01:
+    fires: 2
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  kp.longevity.dbas_fully_signifies.01:
+    fires: 19199
+    hits: 28
+    hit_rate: 0.0015
+    strength_adjustment: -0.0243
+  kp.longevity.direct_csl_signifies_negative.01:
+    fires: 28
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  kp.longevity.relation_karaka_sub_in_negative.01:
+    fires: 23
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  kp.longevity.rotated_csl_signifies_negative.01:
+    fires: 29
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  kp.longevity.saturn_sub_in_negative.01:
+    fires: 24
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.direct_lord_dusthana.01:
+    fires: 12
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.domain_karaka_saturn_afflicted.01:
+    fires: 7
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.eighth_lord_from_target_dasha.01:
+    fires: 6564
+    hits: 9
+    hit_rate: 0.0014
+    strength_adjustment: -0.0243
+  parashari.longevity.jupiter_aspects_direct.01:
+    fires: 11
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.maraka_dasha.01:
+    fires: 11357
+    hits: 14
+    hit_rate: 0.0012
+    strength_adjustment: -0.0244
+  parashari.longevity.node_in_direct_house.01:
+    fires: 4
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.relation_karaka_afflicted.01:
+    fires: 10
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.relation_karaka_dasha.01:
+    fires: 6536
+    hits: 9
+    hit_rate: 0.0014
+    strength_adjustment: -0.0243
+  parashari.longevity.relation_karaka_in_dusthana.01:
+    fires: 10
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.rotated_lord_afflicted.01:
+    fires: 7
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.rotated_lord_dasha.01:
+    fires: 6810
+    hits: 9
+    hit_rate: 0.0013
+    strength_adjustment: -0.0243
+  parashari.longevity.rotated_lord_in_dusthana.01:
+    fires: 3
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025
+  parashari.longevity.sun_saturn_conjunction.01:
+    fires: 3
+    hits: 0
+    hit_rate: 0.0
+    strength_adjustment: -0.025

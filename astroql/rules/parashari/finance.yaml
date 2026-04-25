@@ -1,0 +1,77 @@
+- rule_id: parashari.finance.dhana_yoga.01
+  school: parashari
+  source: BPHS Ch. 40 — dhana yoga (2L+11L in kendra/trikona)
+  rule_type: yoga
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - finance
+    effects:
+    - magnitude
+  antecedent:
+  - feature: karaka_data.Jupiter.dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.6
+  confidence: 0.6
+  tags:
+  - jupiter
+  - dhana_yoga
+  priority_tier: 2
+- rule_id: parashari.finance.second_lord_dusthana.01
+  school: parashari
+  source: BPHS Ch. 40
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - finance
+    effects:
+    - magnitude
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value:
+    - 6
+    - 8
+    - 12
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - second_lord
+  - dusthana
+  priority_tier: 2
+- rule_id: parashari.finance.venus_strong.01
+  school: parashari
+  source: BPHS — Venus as wealth karaka
+  rule_type: static_placement
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - finance
+    effects:
+    - magnitude
+  antecedent:
+  - feature: karaka_data.Venus.dignity
+    op: in
+    value:
+    - exalted
+    - own
+  consequent:
+    polarity: positive
+    strength: 0.45
+  confidence: 0.45
+  tags:
+  - venus
+  - wealth
+  priority_tier: 2

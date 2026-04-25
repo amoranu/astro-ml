@@ -1,0 +1,157 @@
+- rule_id: parashari.spouse.venus_sign_element.01
+  school: parashari
+  source: Phaladeepika Ch. 9
+  rule_type: descriptive_nature
+  applicable_to:
+    relationships:
+    - spouse
+    life_areas:
+    - nature
+    - marriage
+    effects:
+    - nature
+  antecedent:
+  - feature: karaka_data.Venus.sign
+    op: in
+    value:
+    - Cancer
+    - Scorpio
+    - Pisces
+  consequent:
+    polarity: neutral
+    strength: 0.55
+    attributes:
+      temperament:
+      - emotional
+      - sensitive
+      - nurturing
+      complexion_hint: fair
+  confidence: 0.55
+  tags:
+  - venus
+  - water_sign
+  - spouse_nature
+  priority_tier: 2
+- rule_id: parashari.spouse.venus_fire_sign.01
+  school: parashari
+  source: Phaladeepika Ch. 9
+  rule_type: descriptive_nature
+  applicable_to:
+    relationships:
+    - spouse
+    life_areas:
+    - nature
+    - marriage
+    effects:
+    - nature
+  antecedent:
+  - feature: karaka_data.Venus.sign
+    op: in
+    value:
+    - Aries
+    - Leo
+    - Sagittarius
+  consequent:
+    polarity: neutral
+    strength: 0.5
+    attributes:
+      temperament:
+      - assertive
+      - passionate
+      - energetic
+      complexion_hint: reddish
+  confidence: 0.5
+  tags:
+  - venus
+  - fire_sign
+  - spouse_nature
+  priority_tier: 2
+- rule_id: parashari.spouse.seventh_lord_benefic.01
+  school: parashari
+  source: BPHS Ch. 24 — nature of spouse from 7L
+  rule_type: descriptive_nature
+  applicable_to:
+    relationships:
+    - spouse
+    life_areas:
+    - nature
+    - marriage
+    effects:
+    - nature
+  antecedent:
+  - feature: primary_house_data.rotated.lord
+    op: in
+    value:
+    - Jupiter
+    - Venus
+    - Mercury
+    - Moon
+  consequent:
+    polarity: neutral
+    strength: 0.5
+    attributes:
+      disposition:
+      - gentle
+      - cooperative
+  confidence: 0.5
+  tags:
+  - seventh_lord
+  - benefic
+  priority_tier: 2
+- rule_id: parashari.marriage.existence.01
+  school: parashari
+  source: BPHS Ch. 29 — denial combinations
+  rule_type: yoga
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - marriage
+    effects:
+    - existence
+  antecedent:
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value:
+    - exalted
+    - own
+    - friend
+  consequent:
+    polarity: positive
+    strength: 0.6
+  confidence: 0.6
+  tags:
+  - marriage
+  - existence
+  priority_tier: 2
+- rule_id: parashari.marriage.denial.01
+  school: parashari
+  source: BPHS — denial of marriage combinations
+  rule_type: yoga
+  applicable_to:
+    relationships:
+    - self
+    life_areas:
+    - marriage
+    effects:
+    - existence
+  antecedent:
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value:
+    - debilitated
+    - combust
+  - feature: primary_house_data.rotated.occupants
+    op: contains_any
+    value:
+    - Saturn
+    - Rahu
+    - Ketu
+  consequent:
+    polarity: negative
+    strength: 0.5
+  confidence: 0.5
+  tags:
+  - marriage
+  - denial
+  priority_tier: 2

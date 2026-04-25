@@ -1,0 +1,96 @@
+# Parashari classical-override exceptions for Phase F planner.
+#
+# Each exception either softens or amplifies a line/yoga's contribution
+# when a classical condition holds. The condition grammar is the same
+# as rule antecedents (list of clauses, AND-combined).
+#
+# This file starts minimal — the heavy classical overrides (Vipreet
+# Raja Yoga, Neecha Bhanga, Mrityu Bhaga, Argala) need engine
+# extensions (Phase F.9) to expose their input features. For now we
+# expose what's authorable against the existing feature schema.
+
+exceptions:
+
+  - id: saturn_in_own_or_exalted_softens_sade_sati
+    scope: yoga
+    applies_to_yogas:
+      - parashari.longevity.sade_sati.01
+      - parashari.longevity.ashtama_shani.01
+      - parashari.longevity.kantaka_shani.01
+    condition_type: chart_static
+    condition:
+      - feature: karaka_data.Saturn.dignity
+        op: in
+        value: [exalted, own]
+    attenuation: 0.5
+    source: Phaladeepika Ch.26 v.18 (paraphrased)
+    notes: |
+      Phaladeepika holds that benefic Saturn (own/exalted) softens
+      Sade Sati / Ashtama Shani affliction. Aspect-by-Jupiter clause
+      from the spec is deferred until aspect-from list is exposed for
+      Saturn in karaka_data (currently only available for the target
+      house). Attenuation 0.5 = halve those yogas' strength.
+
+  - id: sun_in_chain_protective_dampens_static
+    scope: line
+    applies_to_lines:
+      - static_promise
+    condition_type: window_dynamic
+    condition:
+      - feature: candidate.sun_in_chain
+        op: eq
+        value: true
+      - feature: candidate.chain_strength
+        op: eq
+        value: full
+    attenuation: 0.7
+    source: derived from sun_in_chain_protective.01 yoga semantics
+    notes: |
+      When the dasha chain has Sun present and runs at full strength,
+      the natal static promise alone shouldn't drive the window — Sun
+      activation is generally protective for father (Sun = pitri
+      karaka). Reduce static_promise contribution by 30% only on
+      such windows.
+
+  - id: vipreet_raja_yoga
+    scope: line
+    applies_to_lines:
+      - static_promise
+    condition_type: chart_static
+    condition:
+      - feature: primary_house_data.vipreet_raja_yoga_present
+        op: eq
+        value: true
+    attenuation: 0.4
+    source: BPHS Ch.36 — Vipreet Raja Yoga
+    notes: |
+      Lord of dusthana (6/8/12) sits in another dusthana — classical
+      "bad becomes good" inversion. The natal static promise of
+      affliction is significantly weakened: dusthana lordship that
+      should have been malefic instead grants Raja Yoga benefits.
+      Attenuation 0.4 = reduce static_promise net by 60%. Does not
+      affect dasha lines (the activation timing remains valid; only
+      the natal promise is inverted).
+
+  - id: neecha_bhanga_chain_lord
+    scope: yoga
+    applies_to_yogas:
+      - parashari.longevity.classical_maraka_yoga.01
+      - parashari.longevity.role_overlay_yoga.01
+      - parashari.longevity.chain_dignity_afflicted.01
+    condition_type: chart_static
+    condition:
+      - feature: primary_house_data.neecha_bhanga_present
+        op: eq
+        value: true
+    attenuation: 0.5
+    source: Phaladeepika Ch.6 — Neecha Bhanga Raja Yoga
+    notes: |
+      Any debilitated planet in the chart has its debility cancelled
+      (dispositor or exaltation-lord in kendra/trikona). When such a
+      planet appears in the chain as a maraka or role-overlay lord,
+      its malefic strength is softened. Attenuation 0.5 halves those
+      yogas' contributions in any line they appear. Doesn't apply if
+      the chain lords aren't among the cancelled planets — but this
+      simplification is acceptable for v1; F.10+ can add per-chain-
+      lord scoping.

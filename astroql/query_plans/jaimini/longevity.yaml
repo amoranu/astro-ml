@@ -1,0 +1,91 @@
+plan_id: jaimini.longevity.v1
+school: jaimini
+relationship: father
+life_area: longevity
+effect: event_negative
+goal: |
+  Predict timing windows for father's death event using Jaimini factors:
+  Atmakaraka condition, Gnatikaraka in target house, Bhratrukaraka in
+  dusthana, Karakamsha 9H affliction. PiK (Pitrukaraka) extraction +
+  Chara Dasha + Argala-on-PiK come in F.10 — until then this plan
+  produces ranked windows only when Chara Dasha candidates are
+  available. Static yogas still contribute to per-line scoring.
+
+reasoning_lines:
+
+  - id: ak_status
+    description: |
+      Atmakaraka (life-significator) condition. AK in dusthana or
+      debilitated/combust marks long-term longevity weakness; for
+      father, AK affliction colors the entire chart's promise.
+    yogas:
+      supporting:
+        - jaimini.longevity.atmakaraka_afflicted.01
+        - jaimini.longevity.ak_in_dusthana.01
+    chart_facts:
+      supporting:
+        - feature: karaka_data.AK.house
+          op: in
+          value: [6, 8, 12]
+          weight: 1.0
+        - feature: karaka_data.AK.dignity
+          op: in
+          value: [debilitated, enemy]
+          weight: 1.0
+    alpha: 0.5
+    base_strength: 0.5
+
+  - id: gk_target_overlay
+    description: |
+      Gnatikaraka in the direct father house (rotated 9H) — classical
+      enemy/disruption karaka in the relation's house signals adverse
+      events for that relation.
+    yogas:
+      supporting:
+        - jaimini.longevity.gk_in_target_direct.01
+    chart_facts:
+      supporting:
+        - feature: karaka_data.GK.house
+          op: in
+          value: [6, 8, 12]
+          weight: 1.0
+    alpha: 0.5
+    base_strength: 0.4
+
+  - id: bk_dusthana
+    description: |
+      Bhratrukaraka in dusthana — secondary affliction signal (BK is
+      sibling karaka in classical Jaimini but its dusthana placement
+      generally degrades the karmic backdrop).
+    yogas:
+      supporting:
+        - jaimini.longevity.bk_in_target.01
+    alpha: 0.5
+
+  - id: karakamsha_overlay
+    description: |
+      Karakamsha lagna (AK's sign in D9) condition. House placements
+      indicate the karmic theater of life events. F.10 will add
+      9H-from-karakamsha-affliction yogas; this slot reserves the
+      line.
+    chart_facts:
+      supporting:
+        - feature: jaimini_features.karakamsha_house
+          op: in
+          value: [6, 8, 12]
+          weight: 1.0
+    alpha: 0.5
+    base_strength: 0.35
+
+aggregation:
+  method: rrf
+  k: 60
+  weights:
+    ak_status: 1.5
+    gk_target_overlay: 1.2
+    bk_dusthana: 0.7
+    karakamsha_overlay: 1.0
+
+# Exceptions: PiK karako-bhava-nashaya, Jaimini neecha bhanga, etc. come
+# in F.10 once PiK extraction + sign-aspect features land.
+exceptions: []

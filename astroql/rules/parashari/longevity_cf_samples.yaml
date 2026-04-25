@@ -1,0 +1,152 @@
+# CF-native Parashari longevity rules (sample backfill, 2026-04-24)
+#
+# Demonstrates the v1 neuro-symbolic schema from
+# NEUROSYMBOLIC_ENGINE_DESIGN.md §2.2:
+#   - explicit base_cf (replaces legacy consequent.polarity + strength)
+#   - is_veto + base_cf=±1.0 for absolute denial/protection yogas
+#   - subsumes_rules for yoga-bhanga (veto-subsumes-veto only)
+#   - modifiers for conditional CF adjustments
+#   - provenance with citations (author="human" for curated;
+#     "llm_critic" for critic-proposed)
+#
+# These sit alongside the legacy longevity.yaml rules (no breakage).
+
+- rule_id: parashari.longevity.rotated_lord_afflicted.cf01
+  school: parashari
+  source: BPHS Ch. 46 (longevity)
+  rule_type: static_placement
+  applicable_to:
+    relationships: [self, father, mother, spouse, children,
+                    elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value: [debilitated, combust, enemy]
+  base_cf: -0.55
+  # Rule's strength depends on how strong the afflicted rotated lord
+  # itself is — a debilitated Saturn is more injurious if Saturn
+  # happens to be well-supported elsewhere (retrograde Sthana gain,
+  # exalted dispositor, etc.). Sun as the generic longevity karaka is
+  # the stable primary planet here.
+  primary_planet: Sun
+  modifiers:
+  - condition:
+      feature: primary_house_data.rotated.lord_retrograde
+      op: eq
+      value: true
+    effect_cf: -0.15
+    explanation: Retrograde affliction deepens weakness of the primary
+      house lord (BPHS retrograde adhikara).
+  priority_tier: 2
+  tags: [rotated_lord, affliction, cf_v1]
+  provenance:
+    author: human
+    confidence: 0.55
+    citations:
+    - source_id: BPHS_ch46_longevity
+      text_chunk: An afflicted lord of the primary house weakens the
+        underlying signification. Debilitation, combustion, or placement
+        in an inimical sign are among the primary afflictions.
+
+- rule_id: parashari.longevity.rotated_lord_dusthana.cf01
+  school: parashari
+  source: BPHS Ch. 46
+  rule_type: static_placement
+  applicable_to:
+    relationships: [self, father, mother, spouse, children,
+                    elder_sibling, younger_sibling]
+    life_areas: [longevity]
+    effects: [event_negative]
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value: [6, 8, 12]
+  base_cf: -0.50
+  primary_planet: Sun
+  priority_tier: 2
+  tags: [rotated_lord, dusthana, cf_v1]
+  provenance:
+    author: human
+    confidence: 0.50
+    citations:
+    - source_id: BPHS_ch46_dusthana
+      text_chunk: A lord placed in 6, 8, or 12 from itself or from the
+        lagna gives results of that dusthana — loss, enmity, or
+        dissolution — during its dasha.
+
+- rule_id: parashari.longevity.durmarana_confluence.veto01
+  school: parashari
+  source: BPHS Ch. 46 / Jataka Parijata durmarana yogas
+  rule_type: static_placement
+  applicable_to:
+    relationships: [self]
+    life_areas: [longevity]
+    effects: [event_negative]
+  # Durmarana confluence: rotated lord in dusthana AND afflicted AND
+  # karaka (Sun/Saturn) also in dusthana — classical absolute death
+  # window indicator.
+  antecedent:
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value: [6, 8, 12]
+  - feature: primary_house_data.rotated.lord_dignity
+    op: in
+    value: [debilitated, combust, enemy]
+  - feature: karaka_data.Sun.house
+    op: in
+    value: [6, 8, 12]
+  is_veto: true
+  base_cf: -1.0
+  priority_tier: 1
+  tags: [durmarana, veto, cf_v1]
+  provenance:
+    author: human
+    confidence: 0.75
+    citations:
+    - source_id: BPHS_ch46_durmarana
+      text_chunk: When the lord of the primary bhava, afflicted and
+        placed in dusthana, combines with a similarly placed karaka,
+        the classical texts describe a durmarana (untimely death)
+        confluence during its periods.
+
+- rule_id: parashari.longevity.mahamrityunjaya_yoga.veto01
+  school: parashari
+  source: BPHS / classical counter-yoga
+  rule_type: static_placement
+  applicable_to:
+    relationships: [self]
+    life_areas: [longevity]
+    effects: [event_positive]
+  # Mahamrityunjaya: strong Jupiter in a kendra, with the lord of the
+  # primary bhava well-placed — protective yoga that neutralizes
+  # durmarana indications. Yoga-bhanga.
+  antecedent:
+  - feature: karaka_data.Jupiter.house
+    op: in
+    value: [1, 4, 7, 10]
+  - feature: karaka_data.Jupiter.dignity
+    op: in
+    value: [own, exalted, friend]
+  - feature: primary_house_data.rotated.lord_house
+    op: in
+    value: [1, 4, 5, 7, 9, 10, 11]
+  is_veto: true
+  base_cf: 1.0
+  # Yoga-bhanga: this veto subsumes the durmarana veto. Only a veto
+  # may subsume a veto (loader enforces).
+  subsumes_rules:
+  - parashari.longevity.durmarana_confluence.veto01
+  priority_tier: 1
+  tags: [mahamrityunjaya, yoga_bhanga, veto, cf_v1]
+  provenance:
+    author: human
+    confidence: 0.70
+    citations:
+    - source_id: BPHS_mahamrityunjaya
+      text_chunk: A strong Jupiter in kendra, aspecting the lagna or
+        the lord of life, together with a well-placed lord of the
+        primary bhava, forms a protective configuration classically
+        called Mahamrityunjaya — neutralizing death-bearing
+        combinations during the same period.

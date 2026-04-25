@@ -1,0 +1,258 @@
+# Canonical feature schema. Rule antecedents MUST reference feature paths
+# from this file. The rule loader validates every rule at load time.
+#
+# Path conventions:
+#   <static-path>                   — reads from FeatureBundle
+#   candidate.<field>               — bound per-dasha-candidate (TIMING rules)
+#   karaka_data.<planet>.<field>    — must substitute a real planet name
+#   varga_features.<varga>.<field>  — varga is D1|D8|D9|D12|D30|...
+#
+# This file drives validation, not execution. Keep paths in sync with
+# astroql/features/parashari.py and friends.
+
+static:
+  # ── Target house blocks ─────────────────────────────────────────
+  primary_house_data.rotated.house:       int
+  primary_house_data.rotated.sign:        str
+  primary_house_data.rotated.lord:        planet
+  primary_house_data.rotated.lord_sign:   str
+  primary_house_data.rotated.lord_house:  int
+  primary_house_data.rotated.lord_dignity: dignity
+  primary_house_data.rotated.lord_retrograde: bool
+  primary_house_data.rotated.lord_combust:    bool
+  primary_house_data.rotated.occupants:   list[planet]
+  primary_house_data.rotated.aspects_from: list[planet]
+  primary_house_data.rotated.badhaka_house: int
+  primary_house_data.rotated.marakas_houses: list[int]
+
+  primary_house_data.direct.house:        int
+  primary_house_data.direct.sign:         str
+  primary_house_data.direct.lord:         planet
+  primary_house_data.direct.lord_sign:    str
+  primary_house_data.direct.lord_house:   int
+  primary_house_data.direct.lord_dignity: dignity
+  primary_house_data.direct.lord_retrograde: bool
+  primary_house_data.direct.lord_combust:    bool
+  primary_house_data.direct.occupants:    list[planet]
+  primary_house_data.direct.aspects_from: list[planet]
+
+  # Phase F.9 — classical-override chart-static flags.
+  primary_house_data.vipreet_raja_yoga_present: bool
+  primary_house_data.vipreet_raja_yoga_count:   int
+  primary_house_data.neecha_bhanga_present:     bool
+  primary_house_data.neecha_bhanga_planets:     list[planet]
+
+  # v32 inverted-mining (Patel Ashtakavarga sloka 10):
+  # malefics in 4H from natal Sun, with benefic-aspect attack pool.
+  primary_house_data.fourth_from_sun_house:           int
+  primary_house_data.malefics_in_4h_from_sun:         list[planet]
+  primary_house_data.n_malefics_in_4h_from_sun:       int
+  primary_house_data.benefics_aspect_4h_from_sun:     list[planet]
+  primary_house_data.malefics_4h_from_sun_unprotected: bool
+
+  # v33 inverted-mining (BPHS Ch.13 verses 13-25):
+  # age-specific father-death chart-static patterns. Each is paired
+  # with a tight age-window gate in the rule yaml.
+  primary_house_data.bphs_13_pattern_within_1y:               bool
+  primary_house_data.bphs_13_pattern_year_2_or_12:            bool
+  primary_house_data.bphs_13_pattern_year_16_or_18:           bool
+  primary_house_data.bphs_13_pattern_year_44_parivartana:     bool
+  primary_house_data.bphs_13_pattern_year_50_sun_mars_saturn: bool
+  primary_house_data.bphs_13_pattern_year_26_or_30:           bool
+
+  # ── Karakas (planet name substituted at lookup time) ────────────
+  karaka_data.<planet>.sign:           str
+  karaka_data.<planet>.house:          int
+  karaka_data.<planet>.nakshatra:      str
+  karaka_data.<planet>.nakshatra_lord: planet
+  karaka_data.<planet>.dignity:        dignity
+  karaka_data.<planet>.retrograde:     bool
+  karaka_data.<planet>.combust:        bool
+
+  # ── Varga snapshots ─────────────────────────────────────────────
+  varga_features.<varga>.target_sign:       str
+  varga_features.<varga>.target_occupants:  list[planet]
+  varga_features.<varga>.<planet-lc>_sign:    str
+  varga_features.<varga>.<planet-lc>_house:   int
+  varga_features.<varga>.<planet-lc>_dignity: dignity
+
+# Per-candidate (dasha-window) bindings available only to TIMING rules.
+per_candidate:
+  candidate.level:               str                # MD|AD|PAD|SD
+  candidate.md:                  planet
+  candidate.ad:                  planet
+  candidate.pad:                 planet_or_null
+  candidate.matched_lords:       list[planet]
+  candidate.lord_roles_present:  list[str]          # maraka, rotated_lord, ...
+  candidate.n_distinct_roles:    int                # # distinct astro roles in chain
+  candidate.chain_strength:      str                # full | partial | weak
+  candidate.saturn_transit_target:  bool            # Saturn in natal target sign at window midpoint
+  candidate.jupiter_transit_target: bool            # Jupiter in natal target sign at window midpoint
+  # Manual-rule extensions (chart-inspection-derived).
+  candidate.chain_lord_in_8h:        bool           # any chain lord in natal 8H
+  candidate.chain_lord_in_12h:       bool           # any chain lord in natal 12H
+  candidate.chain_lord_in_dusthana:  bool           # any chain lord in 6/8/12
+  candidate.chain_lord_in_8h_from_target: bool      # any chain lord in 8H from rotated target
+  candidate.n_malefics_in_chain:     int            # Sun+Mars+Saturn+Rahu+Ketu count
+  candidate.n_benefics_in_chain:     int            # Moon+Mercury+Jupiter+Venus count
+  candidate.n_debilitated_in_chain:  int            # chain lords with debilitated dignity
+  candidate.n_combust_in_chain:      int            # chain lords combust at birth
+  candidate.md_pad_same_planet:      bool           # MD lord == PAD lord
+  candidate.md_ad_same_planet:       bool           # MD lord == AD lord
+  candidate.window_duration_days:    int            # leaf window length
+  candidate.window_short:            bool           # < 60 days
+  candidate.window_long:             bool           # > 365 days
+  candidate.saturn_in_chain:         bool
+  candidate.sun_in_chain:            bool
+  candidate.jupiter_in_chain:        bool
+  candidate.mars_in_chain:           bool
+  candidate.rahu_or_ketu_in_chain:   bool
+  candidate.any_nak_lord_relevant:   bool           # any chain lord's nakshatra lord plays a relevant role
+  candidate.n_nak_lord_roles:        int            # # distinct roles played by chain lords' nakshatra lords
+  candidate.saturn_over_natal_sun:   bool           # Saturn transits natal Sun sign at window midpoint
+  candidate.sade_sati:               bool           # Saturn in 12th/1st/2nd from natal Moon (Phaladeepika 26)
+  candidate.ashtama_shani:           bool           # Saturn in 8H from natal Moon (BPHS Ch.46 — parental loss)
+  candidate.kantaka_shani:           bool           # Saturn in 4H from natal Moon (afflicts 4H significations)
+  candidate.md_roles:                list[str]      # roles played by MD lord
+  candidate.ad_roles:                list[str]      # roles played by AD lord
+  candidate.pad_roles:               list[str]      # roles played by PAD lord
+  candidate.n_md_roles:              int            # # roles MD lord plays
+  candidate.n_ad_roles:              int            # # roles AD lord plays
+  candidate.n_pad_roles:             int            # # roles PAD lord plays
+  candidate.n_max_level_roles:       int            # max # roles any single chain lord plays (overlay signature)
+  # Phase F.9: Mrityu Bhaga (BPHS Ch.40) — chain lord at critical degree.
+  candidate.chain_lord_in_mrityu_bhaga: bool
+  candidate.n_chain_in_mrityu_bhaga:    int
+  # v17: Jupiter benefic counts as protective only when natally well-placed.
+  candidate.jupiter_well_placed_in_chain: bool
+  # v18: Jupiter as dasha lord playing death-cluster role is NOT protective
+  # (Karako Bhava Nashaya — Phaladeepika Ch.6, Saravali 31).
+  candidate.jupiter_safe_protective: bool
+  # v23: Mars transit overlays — Phaladeepika Ch.18 acute death triggers.
+  candidate.mars_over_natal_sun: bool
+  candidate.mars_8h_from_moon:   bool
+  candidate.mars_transit_target: bool
+  # v28: Mrityu Yoga — Mars-Saturn same-sign conjunction at midpoint
+  # (BPHS Ch.46 — classical sudden-death yoga).
+  candidate.mars_saturn_conjunction_transit: bool
+  # v32 inverted-mining additions:
+  # - Patel Ashtakavarga sloka 11: Saturn transits 9H from natal Moon
+  # - Chatterjee Medical: Saturn co-active with chain-maraka role
+  candidate.saturn_transit_9h_from_moon:        bool
+  candidate.malefic_saturn_with_maraka_chain:   bool
+  # v32: Saturn transits Pushya / Anuradha / Uttarabhadra at midpoint
+  # (BPHS Santhanam — father-specific critical nakshatra trigger).
+  candidate.saturn_in_father_critical_nakshatra: bool
+
+# ─────────────────────────────────────────────────────────────────────
+# v38 chart_applicability — Laghu Parashari functional-role derivation.
+# Evaluated once per chart, drives rule.applicable_when and window
+# applicability multipliers. See features/classical.py:compute_functional_roles.
+# ─────────────────────────────────────────────────────────────────────
+chart_applicability:
+  chart_applicability.lagna_sign:           str
+  chart_applicability.lagna_lord:           planet
+  chart_applicability.yogakarakas:          list[planet]
+  chart_applicability.functional_malefics:  list[planet]
+  chart_applicability.functional_benefics:  list[planet]
+  # Derived per-planet boolean flags.
+  chart_applicability.saturn_is_fm:         bool
+  chart_applicability.saturn_is_yk:         bool
+  chart_applicability.saturn_is_fb:         bool
+  chart_applicability.mars_is_fm:           bool
+  chart_applicability.mars_is_yk:           bool
+  chart_applicability.mars_is_fb:           bool
+  chart_applicability.jupiter_is_fm:        bool
+  chart_applicability.jupiter_is_fb:        bool
+  chart_applicability.jupiter_is_yk:        bool
+  chart_applicability.sun_is_fm:            bool
+  chart_applicability.sun_is_fb:            bool
+  chart_applicability.mercury_is_fm:        bool
+  chart_applicability.mercury_is_fb:        bool
+  chart_applicability.venus_is_fm:          bool
+  chart_applicability.venus_is_fb:          bool
+  chart_applicability.venus_is_yk:          bool
+  chart_applicability.moon_is_fm:           bool
+  chart_applicability.moon_is_fb:           bool
+  chart_applicability.moon_is_yk:           bool
+  # v38.7 — Pitri-karaka + 9H affliction primitives (Phaladeepika Ch.14).
+  # Computed once per chart via compute_father_natal_context().
+  chart_applicability.sun_house:                       int
+  chart_applicability.sun_dignity:                     dignity
+  chart_applicability.sun_in_dusthana:                 bool
+  chart_applicability.sun_conj_malefic_natally:        bool
+  chart_applicability.sun_aspected_by_malefic_natally: bool
+  chart_applicability.sun_afflicted_natally:           bool
+  chart_applicability.saturn_attacks_sun_natally:      bool
+  chart_applicability.mars_attacks_sun_natally:        bool
+  chart_applicability.rahu_ketu_attacks_sun_natally:   bool
+  chart_applicability.ninth_lord:                      planet
+  chart_applicability.ninth_lord_house:                int
+  chart_applicability.ninth_lord_dignity:              dignity
+  chart_applicability.ninth_lord_combust:              bool
+  chart_applicability.ninth_lord_in_dusthana:          bool
+  chart_applicability.ninth_lord_afflicted_natally:    bool
+  chart_applicability.saturn_attacks_ninth_lord_natally: bool
+  chart_applicability.mars_attacks_ninth_lord_natally: bool
+  chart_applicability.rahu_ketu_attacks_ninth_lord_natally: bool
+  chart_applicability.any_malefic_attacks_father:      bool
+  chart_applicability.ninth_house_has_malefic:         bool
+  chart_applicability.ninth_house_aspected_by_malefic: bool
+  chart_applicability.papa_kartari_on_sun:             bool
+  chart_applicability.papa_kartari_on_ninth:           bool
+  chart_applicability.pitri_dosha_sun_saturn:          bool
+  chart_applicability.pitri_dosha_sun_nodes:           bool
+  chart_applicability.father_affliction_score:         int
+  chart_applicability.father_unafflicted:              bool
+  chart_applicability.father_moderately_afflicted:     bool
+  chart_applicability.father_severely_afflicted:       bool
+  # v33: per-window native age (years from native birth to mid of
+  # the dasha window). Set by the runner during the age-cutoff loop.
+  candidate.native_age_at_midpoint:              float
+  # KP per-candidate fields
+  candidate.all_signify:         bool               # MD+AD+PAD all signify cluster
+  candidate.signifying_lords:    list[planet]
+
+# Jaimini-specific static feature paths
+jaimini_static:
+  primary_house_data.rotated.house:          int
+  primary_house_data.rotated.sign_num:       int
+  primary_house_data.rotated.occupants:      list[planet]
+  primary_house_data.direct.house:           int
+  primary_house_data.direct.sign_num:        int
+  primary_house_data.direct.occupants:       list[planet]
+  primary_house_data.arudha_target_rotated_sign: int
+  primary_house_data.arudha_target_direct_sign:  int
+  jaimini_features.relation_karaka_code:     str
+  jaimini_features.relation_karaka_planet:   planet
+  jaimini_features.atmakaraka:               planet
+  jaimini_features.karakamsha_house:         int
+  karaka_data.<karaka_code>.planet:          planet
+  karaka_data.<karaka_code>.sign:            str
+  karaka_data.<karaka_code>.house:           int
+  karaka_data.<karaka_code>.dignity:         dignity
+  karaka_data.<karaka_code>.eighth_from_sign_num: int
+
+# KP-specific static feature paths
+kp_static:
+  primary_house_data.rotated.csl:                    planet
+  primary_house_data.rotated.csl_signifies:          list[int]
+  primary_house_data.rotated.csl_signifies_negative_cluster: bool
+  primary_house_data.direct.csl:                     planet
+  primary_house_data.direct.csl_signifies:           list[int]
+  primary_house_data.direct.csl_signifies_negative_cluster:  bool
+  primary_house_data.relevant_houses:                list[int]
+  primary_house_data.signifiers_of_cluster:          list[planet]
+  karaka_data.<planet>.star_lord:                    planet
+  karaka_data.<planet>.sub_lord:                     planet
+  karaka_data.<planet>.sub_lord_star_lord:           planet
+  karaka_data.<planet>.placidus_house:               int
+  karaka_data.<planet>.significators:                list[int]
+
+# Enumerations
+enums:
+  planet: [Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu,
+           Uranus, Neptune, Pluto]
+  dignity: [exalted, own, friend, neutral, enemy, debilitated]
+  sign: [Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio,
+         Sagittarius, Capricorn, Aquarius, Pisces]
