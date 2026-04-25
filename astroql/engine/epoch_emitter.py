@@ -75,6 +75,65 @@ def _whole_sign_house(planet_sign_num: int, lagna_sign_num: int) -> int:
     return ((planet_sign_num - lagna_sign_num) % 12) + 1
 
 
+_SIGN_ORDER = (
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces",
+)
+
+_HOUSE_NAMES = (
+    "lagna_lord", "second_lord", "third_lord", "fourth_lord",
+    "fifth_lord", "sixth_lord", "seventh_lord", "eighth_lord",
+    "ninth_lord", "tenth_lord", "eleventh_lord", "twelfth_lord",
+)
+
+
+def _nth_sign_from(sign: str, n: int) -> str:
+    """Return the nth sign forward from `sign` (1-indexed: n=1 → sign)."""
+    try:
+        i = _SIGN_ORDER.index(sign)
+    except ValueError:
+        return ""
+    return _SIGN_ORDER[(i + n - 1) % 12]
+
+
+def _compute_derived_lords(
+    natal_lagna_sign: str,
+    sun_natal_sign: str,
+) -> Dict[str, str]:
+    """Pre-compute every lord identity that the JSON DSL might query.
+
+    Returns a flat dict the rule author can reference via dot-paths:
+      "derived_lords.ninth_lord", "derived_lords.father_8L", etc.
+
+    All values are planet names (e.g. "Saturn"). Empty string when
+    a lord cannot be derived (typically chart not fully populated).
+    """
+    out: Dict[str, str] = {}
+    if not natal_lagna_sign:
+        return out
+    # Native-lagna-relative house lords (1L..12L).
+    for house_idx, key in enumerate(_HOUSE_NAMES, start=1):
+        sign = _nth_sign_from(natal_lagna_sign, house_idx)
+        out[key] = _sb.sign_lord(sign) if sign else ""
+    # Derived father-lagna lords (BPHS Ch. 8). Father's lagna =
+    # native's 9H sign; F2L/F7L/F8L/F12L are 2nd/7th/8th/12th from
+    # that derived lagna.
+    father_lagna = _nth_sign_from(natal_lagna_sign, 9)
+    out["father_lagna_sign"] = father_lagna
+    if father_lagna:
+        out["father_2L"] = _sb.sign_lord(_nth_sign_from(father_lagna, 2))
+        out["father_7L"] = _sb.sign_lord(_nth_sign_from(father_lagna, 7))
+        out["father_8L"] = _sb.sign_lord(_nth_sign_from(father_lagna, 8))
+        out["father_12L"] = _sb.sign_lord(_nth_sign_from(father_lagna, 12))
+    # Sun-karaka marakas for father (2nd/7th from natal Sun).
+    if sun_natal_sign:
+        out["sun_2nd_maraka"] = _sb.sign_lord(
+            _nth_sign_from(sun_natal_sign, 2))
+        out["sun_7th_maraka"] = _sb.sign_lord(
+            _nth_sign_from(sun_natal_sign, 7))
+    return out
+
+
 def _ensure_aware(dt: _dt.datetime, fallback_tz: str) -> _dt.datetime:
     """Promote naive datetimes to tz-aware using fallback_tz."""
     if dt.tzinfo is not None:
@@ -176,6 +235,16 @@ def emit_epochs(
         natal_virupas, natal_sign_by_planet,
     )
 
+    # ── Pre-computed lord identities (chart-static) ──────────────
+    # Exposed on every EpochState so DSL paths (e.g. "derived_lords.
+    # ninth_lord") resolve without invoking helper functions. This
+    # is what unblocks LLM-emitted rules that reference house lords
+    # via JSON conditions (see dsl_evaluator.evaluate).
+    derived_lords = _compute_derived_lords(
+        natal_lagna_sign=natal_lagna["rashi"],
+        sun_natal_sign=natal_sign_by_planet.get("Sun", ""),
+    )
+
     # ── Sookshma-depth dasha sequence, clipped to query window ──────
     moon_lon = float(natal_positions["Moon"]["longitude"])
     raw_seq = engine.calculate_dasha_sequence(
@@ -269,6 +338,7 @@ def emit_epochs(
             dashas=dashas,
             planets=planets_out,
             natal_lagna_sign=natal_lagna["rashi"],
+            derived_lords=derived_lords,
         ))
 
     return epochs

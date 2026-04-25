@@ -1,23 +1,37 @@
 """CF inference engine (Module B of NEUROSYMBOLIC_ENGINE_DESIGN.md §3.B).
 
-Consumes pre-fired rules (from the existing `RuleEngine` clause
-evaluator) and layers the CF neuro-symbolic pipeline:
+Consumes fired rules and layers the CF neuro-symbolic pipeline:
 
   filter CF-native → yoga-bhanga prune → veto short-circuit →
-  shadbala μ modulation → MYCIN aggregation → emit execution trace
+  modifier composition → shadbala μ modulation → MYCIN aggregation →
+  emit execution trace
 
-Modifier evaluation is deferred — the schema already carries them, but
-v1 does not re-evaluate modifier conditions (they were not in scope for
-the initial CF pipeline). They will be wired in when the LLM critic
-starts proposing modifier-bearing rules.
+Modifier evaluation has TWO supported paths:
+
+  1. **Pre-evaluated** (legacy): caller populates
+     `FiredRule.fired_modifier_indices` with the indices of modifiers
+     that fired this epoch. Used by `cf_predict.py` with Python-lambda
+     `CFRuleSpec.modifier_predicates`. Runs unchanged.
+
+  2. **JSON-DSL** (LLM-autonomous): caller passes the `epoch_state`
+     used during firing as `infer_cf(..., epoch_state=ep)`. The engine
+     re-evaluates each `Rule.modifiers[].condition` via
+     `dsl_evaluator.evaluate_modifier_indices` and unions the result
+     with any pre-evaluated indices. Modifiers whose `condition={}`
+     (vacuous) fall through to the legacy path — they must already
+     be in `fired_modifier_indices`.
+
+This dual path lets LLM-emitted rules (pure JSON) and human-written
+rules (Python lambdas) co-exist in the same RuleSet.
 """
 from __future__ import annotations
 
-from typing import Dict, Iterable, List, Optional, Set, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from ..schemas.rules import FiredRule, Rule
 from ..schemas.trace import ExecutionTrace, FiredRuleTrace
 from . import cf_math
+from . import dsl_evaluator as _dsl
 
 
 class CFEngineError(RuntimeError):
@@ -96,20 +110,65 @@ def _resolve_veto(
     return first.rule.effective_base_cf, first.rule.rule_id
 
 
+def _augment_modifier_indices(
+    fr: FiredRule, epoch_state: Optional[Any],
+) -> List[int]:
+    """Return the union of (a) pre-evaluated indices on the FiredRule
+    and (b) DSL-evaluated indices from JSON conditions on the rule's
+    modifiers — when `epoch_state` is supplied.
+
+    Modifiers with `condition={}` are skipped by the DSL path (they
+    are legacy Python-lambda modifiers; their indices, if any, must
+    already be in `fired_modifier_indices`). This avoids double-firing.
+    """
+    indices = list(fr.fired_modifier_indices)
+    if epoch_state is None:
+        return indices
+    conditions = [m.condition for m in fr.rule.modifiers]
+    dsl_fired = _dsl.evaluate_modifier_indices(conditions, epoch_state)
+    seen = set(indices)
+    for idx in dsl_fired:
+        if idx not in seen:
+            indices.append(idx)
+            seen.add(idx)
+    return indices
+
+
 def infer_cf(
     fired_rules: Iterable[FiredRule],
     mu_by_planet: Dict[str, float],
     target_aspect: str,
     query_id: str = "",
+    epoch_state: Optional[Any] = None,
+    overlap_dampening: Optional[Dict[str, float]] = None,
 ) -> Tuple[float, ExecutionTrace]:
-    """Run the Module B CF pipeline on pre-fired rules.
+    """Run the Module B CF pipeline on fired rules.
 
-    Returns `(final_score, ExecutionTrace)`. `final_score` is in
-    [-1, 1]; ±1.0 exactly only for surviving vetoes.
+    Args:
+        fired_rules: rules that fired (pre-evaluated antecedents).
+        mu_by_planet: shadbala μ table for the natal chart.
+        target_aspect: e.g. "longevity" — passed through to trace.
+        query_id: passed through to trace.
+        epoch_state: optional. When provided, the engine re-evaluates
+            `Rule.modifiers[].condition` via the JSON DSL (in addition
+            to any pre-evaluated `fired_modifier_indices`). Required
+            for LLM-emitted rules whose modifiers have non-empty
+            `condition` dicts.
+        overlap_dampening: optional `{rule_id: factor}` mapping in
+            [0, 1]. The final CF for `rule_id` is multiplied by
+            `factor`. Use to dampen rules whose time-varying transit
+            condition holds for only a fraction of the SD period
+            (fast-transit-only firings — e.g. Moon transits that
+            trigger a rule for ~2 days within a multi-day SD).
+            Default = no dampening (all factors implicitly 1.0).
+            Computing the actual fraction (sample N points within
+            each SD, count how many trigger the rule) is left to
+            the caller / future emitter improvement.
 
-    Callers are responsible for upstream steps (clause evaluation,
-    chart_applicability gating, etc.) via the existing rule engine.
+    Returns `(final_score, ExecutionTrace)`. `final_score ∈ [-1, 1]`;
+    ±1.0 exactly only for surviving vetoes.
     """
+    overlap_dampening = overlap_dampening or {}
     fired = [fr for fr in fired_rules if _is_cf_relevant(fr.rule)]
     subsumed = _collect_subsumed(fired)
     surviving = [fr for fr in fired if fr.rule.rule_id not in subsumed]
@@ -152,7 +211,8 @@ def infer_cf(
         # for non-vetoes.
         modifier_explanations: List[str] = []
         adj_base = base
-        for idx in fr.fired_modifier_indices:
+        active_idxs = _augment_modifier_indices(fr, epoch_state)
+        for idx in active_idxs:
             if 0 <= idx < len(fr.rule.modifiers):
                 mod = fr.rule.modifiers[idx]
                 adj_base = cf_math.combine(adj_base, mod.effect_cf)
@@ -160,7 +220,14 @@ def infer_cf(
                     mod.explanation or f"modifier[{idx}]"
                 )
         mu = _planet_mu(fr.rule, mu_by_planet)
-        final_cf = adj_base * mu
+        # Optional overlap-fraction dampening (default 1.0 = no-op).
+        damp = overlap_dampening.get(fr.rule.rule_id, 1.0)
+        if damp < 0.0 or damp > 1.0:
+            raise CFEngineError(
+                f"overlap_dampening[{fr.rule.rule_id}]={damp} must be "
+                f"in [0, 1]"
+            )
+        final_cf = adj_base * mu * damp
         # base is in the strict-open (-1, 1) interval (loader-enforced
         # for CF-native); μ ∈ [0, 1] can only shrink magnitude. With
         # the post-combine clip in cf_math, adj_base also stays inside

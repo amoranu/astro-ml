@@ -20,6 +20,7 @@ so a caller can assume a Rule returned here is structurally valid
 """
 from __future__ import annotations
 
+import inspect
 import json
 import logging
 import sys
@@ -118,6 +119,8 @@ def _default_rule_synth(
     natal_context: Dict[str, Any],
     target_relationship: str,
     target_life_area: str,
+    target_school: str = "parashari",
+    target_karaka_planet: str = "Sun",
 ) -> Dict[str, Any]:
     """Offline / no-LLM fallback: emit a deterministic placeholder rule
     built entirely from RAG provenance. Useful for wiring tests and
@@ -126,6 +129,11 @@ def _default_rule_synth(
     Production runs should supply a real `rule_synth` that calls an
     LLM with proper prompting; this fallback is a schema-valid stub
     that the regression gate will reject on merit.
+
+    `target_karaka_planet` is the primary signifier for the chosen
+    domain (e.g. Sun for father longevity, Moon for mother, Venus
+    for spouse). Default Sun matches the v1 father scope; explicit
+    override required for other relationships.
     """
     if not chunks:
         raise CriticError(
@@ -133,28 +141,17 @@ def _default_rule_synth(
             "provenance.citations — got zero. Provide a richer "
             "query_gen / rag_fn or supply a real rule_synth."
         )
-    # Sign: if trace says "event expected but we didn't predict it",
-    # lean negative. If trace fired a veto and the event occurred
-    # anyway, we need a counter-rule. For v1 we emit a mild negative
-    # signal (-0.3) keyed on the same primary planet as the first
-    # fired rule, or Sun as Parashari's longevity karaka default.
-    primary_planet = "Sun"
-    first_fired = trace.rules_fired[0] if trace.rules_fired else None
-    if first_fired:
-        # The base trace doesn't carry primary_planet; try to pull
-        # from natal_context planets table for a sensible default.
-        pass
     citations = [
         {"source_id": c["source"], "text_chunk": c["text"]}
         for c in chunks[:3]
     ]
     proposal_id = (
-        f"parashari.{target_life_area}.critic_proposed."
+        f"{target_school}.{target_life_area}.critic_proposed."
         f"{trace.query_id[:12] or 'anon'}"
     )
     return {
         "rule_id": proposal_id,
-        "school": "parashari",
+        "school": target_school,
         "source": "llm_critic",
         "rule_type": "critic_proposed",
         "applicable_to": {
@@ -171,7 +168,7 @@ def _default_rule_synth(
             "value": [6, 8, 12],
         }],
         "base_cf": -0.3,
-        "primary_planet": primary_planet,
+        "primary_planet": target_karaka_planet,
         "priority_tier": 3,
         "tags": ["critic_proposed", "placeholder"],
         "provenance": {
@@ -189,6 +186,8 @@ def propose_rule(
     natal_context: Dict[str, Any],
     target_relationship: str = "father",
     target_life_area: str = "longevity",
+    target_school: str = "parashari",
+    target_karaka_planet: str = "Sun",
     query_gen: Optional[Callable] = None,
     rag_fn: Optional[Callable] = None,
     rule_synth: Optional[Callable] = None,
@@ -196,9 +195,13 @@ def propose_rule(
 ) -> ProposedRule:
     """Run the critic on one failing trace.
 
-    v1 scope: target_relationship defaults to 'father', target_life_area
-    to 'longevity'. Callers may pass other combinations but no other
-    ground-truth aspect has been audited for this loop yet.
+    v1 scope: defaults wire the father-longevity application
+    (Parashari, Sun-karaka). Other domains require explicit overrides:
+      mother:  target_relationship="mother",  target_karaka_planet="Moon"
+      spouse:  target_relationship="spouse",  target_karaka_planet="Venus"
+      career:  target_life_area="career",     target_karaka_planet="Saturn"
+    The defaults are convenience for the v1 application, NOT engine
+    hardcodes — switch the kwargs and the entire pipeline retargets.
 
     Raises `CriticError` on failed synthesis or `RuleLoadError` if the
     synthesized rule doesn't round-trip through the loader validator.
@@ -232,9 +235,30 @@ def propose_rule(
             seen_texts.add(txt)
             all_chunks.append(c)
 
+    # Pass new domain kwargs only when the supplied rule_synth
+    # accepts them. Older user-supplied callables remain compatible.
+    extra_kwargs: Dict[str, Any] = {}
+    try:
+        sig = inspect.signature(rule_synth)
+        params = sig.parameters
+        if "target_school" in params or any(
+            p.kind == inspect.Parameter.VAR_KEYWORD
+            for p in params.values()
+        ):
+            extra_kwargs["target_school"] = target_school
+        if "target_karaka_planet" in params or any(
+            p.kind == inspect.Parameter.VAR_KEYWORD
+            for p in params.values()
+        ):
+            extra_kwargs["target_karaka_planet"] = target_karaka_planet
+    except (TypeError, ValueError):
+        # Builtins / lambdas without inspectable signature.
+        pass
+
     raw_rule = rule_synth(
         trace, all_chunks, natal_context,
         target_relationship, target_life_area,
+        **extra_kwargs,
     )
     if not isinstance(raw_rule, dict):
         raise CriticError(
@@ -298,6 +322,8 @@ def critic_gate_cycle(
     ],
     target_relationship: str = "father",
     target_life_area: str = "longevity",
+    target_school: str = "parashari",
+    target_karaka_planet: str = "Sun",
     truth_field: str = "father_death_date",
     per_aspect_tolerance: float = 0.02,
     critic_kwargs: Optional[Dict[str, Any]] = None,
@@ -314,6 +340,8 @@ def critic_gate_cycle(
             failing_trace, natal_context,
             target_relationship=target_relationship,
             target_life_area=target_life_area,
+            target_school=target_school,
+            target_karaka_planet=target_karaka_planet,
             **(critic_kwargs or {}),
         )
     except (CriticError, RuleLoadError) as e:

@@ -22,25 +22,57 @@ from ..schemas.birth import BirthDetails
 from ..schemas.epoch_state import EpochState
 from ..schemas.rules import FiredRule, Rule
 from ..schemas.trace import ExecutionTrace
-from . import cf_engine, epoch_emitter
+from . import cf_engine, dsl_evaluator, epoch_emitter
 from . import shadbala as _sb
 
 
 RulePredicate = Callable[[EpochState], bool]
+JSONCondition = dict
+FiresWhen = Union[RulePredicate, JSONCondition]
+
+
+def _resolve_predicate(
+    pred: FiresWhen, ep: EpochState,
+) -> bool:
+    """Evaluate a fires_when / modifier predicate against an EpochState.
+
+    Accepts either:
+      * Python callable `(EpochState) -> bool` (legacy, human-authored)
+      * JSON-DSL dict (LLM-autonomous, see `dsl_evaluator`)
+
+    A dict that is empty is treated as vacuous-true (matches the
+    DSL evaluator's behavior).
+    """
+    if callable(pred):
+        return bool(pred(ep))
+    if isinstance(pred, dict):
+        return dsl_evaluator.evaluate(pred, ep)
+    raise TypeError(
+        f"predicate must be callable or dict, got {type(pred).__name__}"
+    )
 
 
 @dataclass
 class CFRuleSpec:
     """A rule plus the predicates needed to fire it and any modifiers.
 
-    Until the EpochState clause-language is implemented, predicates
-    are hand-coded callables. `modifier_predicates` is parallel to
-    `rule.modifiers`: index i decides whether modifier i fires. A
-    modifier whose predicate returns False is simply not applied.
+    Predicates may be either Python callables (legacy) OR JSON-DSL
+    dicts (LLM-autonomous). The two forms are interchangeable; the
+    engine evaluates whichever shape it receives.
+
+    `modifier_predicates` is parallel to `rule.modifiers`: index i
+    decides whether modifier i fires. A predicate that returns False
+    (or a JSON condition that evaluates to False) means the modifier
+    is not applied for this epoch.
+
+    For LLM-emitted rules: prefer attaching the JSON condition to
+    `rule.modifiers[i].condition` and leaving `modifier_predicates`
+    empty. The engine will pick those up via the DSL path inside
+    `cf_engine.infer_cf` without any spec-level glue.
     """
     rule: Rule
-    fires_when: RulePredicate
-    modifier_predicates: List[RulePredicate] = field(default_factory=list)
+    fires_when: FiresWhen
+    modifier_predicates: List[FiresWhen] = field(default_factory=list)
 
 
 @dataclass
@@ -118,7 +150,7 @@ def predict_extreme_epoch(
         fired: List[FiredRule] = []
         for spec in specs:
             try:
-                if not spec.fires_when(ep):
+                if not _resolve_predicate(spec.fires_when, ep):
                     continue
             except Exception:
                 # A predicate that errors on a particular epoch is a
@@ -127,7 +159,7 @@ def predict_extreme_epoch(
             mod_idxs: List[int] = []
             for idx, mp in enumerate(spec.modifier_predicates):
                 try:
-                    if mp(ep):
+                    if _resolve_predicate(mp, ep):
                         mod_idxs.append(idx)
                 except Exception:
                     continue
@@ -139,6 +171,7 @@ def predict_extreme_epoch(
             continue
         cf, trace = cf_engine.infer_cf(
             fired, mu, target_aspect="longevity", query_id=ep.epoch_id,
+            epoch_state=ep,
         )
         mid = ep.start_time + (ep.end_time - ep.start_time) / 2
         scores.append(EpochScore(

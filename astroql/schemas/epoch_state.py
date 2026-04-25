@@ -51,6 +51,18 @@ class EpochState:
     # predicates can compute lagna-relative quantities (9th-lord,
     # maraka houses 2/7, lagna lord, etc.) without external lookup.
     natal_lagna_sign: str = ""
+    # Pre-computed lord identities the DSL can reach via dot-paths
+    # without invoking helper functions. Populated by
+    # `epoch_emitter.emit_epochs`. Keys (canonical):
+    #   lagna_lord, second_lord, third_lord, fourth_lord, fifth_lord,
+    #   sixth_lord, seventh_lord, eighth_lord, ninth_lord, tenth_lord,
+    #   eleventh_lord, twelfth_lord     ← native-lagna-relative
+    #   father_lagna_sign,
+    #   father_2L, father_7L, father_8L, father_12L  ← derived (BPHS Ch.8)
+    #   sun_2nd_maraka, sun_7th_maraka  ← Sun-karaka maraka theory
+    # Empty when the emitter wasn't able to derive these (e.g. unit
+    # tests with hand-built minimal states).
+    derived_lords: Dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         out: Dict[str, Any] = {
@@ -59,6 +71,7 @@ class EpochState:
             "end_time": self.end_time.isoformat(),
             "dashas": asdict(self.dashas),
             "natal_lagna_sign": self.natal_lagna_sign,
+            "derived_lords": dict(self.derived_lords),
             "planets": {
                 name: asdict(ps) for name, ps in self.planets.items()
             },
@@ -77,5 +90,6 @@ class EpochState:
             end_time=datetime.fromisoformat(d["end_time"]),
             dashas=DashaStack(**d["dashas"]),
             natal_lagna_sign=d.get("natal_lagna_sign", ""),
+            derived_lords=dict(d.get("derived_lords", {})),
             planets=planets,
         )
