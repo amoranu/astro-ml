@@ -1,5 +1,15 @@
 # AstroQL — Caveats & Gap Tracker
 
+> **Repo split note (2026-04-25):** The neuro-symbolic CF engine
+> (cf_engine, cf_predict, dsl_evaluator, ashtakavarga, epoch_emitter,
+> regression, llm_critic, applications/father_longevity/, plus their
+> tests) moved to a dedicated repo:
+> [`amoranu/neuro-symbolic-astro`](https://github.com/amoranu/neuro-symbolic-astro).
+> Caveats CAV-NS-* below describe deferred work in that engine — refer
+> to the new repo's CAVEATS for the live tracker. Schemas (`astroql/
+> schemas/`) and `rules/loader.py` + per-tradition YAMLs are
+> duplicated in both repos; keep them in sync.
+
 Single source of truth for known limitations across all phases.
 Survives conversation compaction. Update whenever a gap is found or closed.
 
